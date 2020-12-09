@@ -16,6 +16,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import socket from '../socket.io'
 
 
 function Copyright() {
@@ -54,11 +55,8 @@ const useStyles = makeStyles((theme) => ({
 const saveLocalStorage = (result) => {
   
   localStorage.setItem("token", JSON.stringify(result.token));
-  console.log("savelocal");
   localStorage.setItem("id", JSON.stringify(result.user._id));
   localStorage.setItem("username", JSON.stringify(result.user.username));
-  console.log("Signin id:" + JSON.parse(localStorage.getItem("id")));
-  console.log("user:" + JSON.parse(localStorage.getItem("user")));
 };
 
 
@@ -86,7 +84,10 @@ export default function SignIn() {
     .then((result) => {
       //console.log(result);
       saveLocalStorage(result);
-      history.push("/app");
+      console.log(result.user.name);
+      socket.emit("onlineUser",result.user.name);
+      history.push('/online');
+    
     })
     .catch((err) => {
       setSuccess(false);
