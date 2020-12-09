@@ -1,28 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { GoogleLogin } from "react-google-login";
+import FacebookLogin from 'react-facebook-login';
+
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
+      {"Copyright © "}
       <Link color="inherit" href="https://material-ui.com/">
         Your Website
-      </Link>{' '}
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
@@ -30,16 +34,16 @@ function Copyright() {
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -47,46 +51,76 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const saveLocalStorage = (result) => {
+  
+  localStorage.setItem("token", JSON.stringify(result.token));
+  console.log("savelocal");
+  localStorage.setItem("id", JSON.stringify(result.user._id));
+  localStorage.setItem("username", JSON.stringify(result.user.username));
+  console.log("Signin id:" + JSON.parse(localStorage.getItem("id")));
+  console.log("user:" + JSON.parse(localStorage.getItem("user")));
+};
+
+
+
 export default function SignIn() {
   const classes = useStyles();
-  const history=useHistory();
-  const url =localStorage.getItem('backend');
-  const [success,setSuccess]=useState(true);
+  const history = useHistory();
+  const url = localStorage.getItem("backend");
+  const [success, setSuccess] = useState(true);
 
-  const [userName,setUserName]=useState("");
-  const [password,setPassword]=useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handlerLogin = async (e)=>
-  {
+  const createFetch = async (linkUrl, body)=>
+{
+  const res = await fetch(linkUrl, {
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  })
+    .then((res) => res.json())
+    .then((result) => {
+      //console.log(result);
+      saveLocalStorage(result);
+      history.push("/app");
+    })
+    .catch((err) => {
+      setSuccess(false);
+      console.log("error aa");
+    });
+}
+
+  const handlerLogin = async (e) => {
     console.log("handlerLogin");
-    const body =   {
-      username:userName,
-      password:password
+    const body = {
+      username: userName,
+      password: password,
+    };
+    createFetch(url + "users/signin",body);
+  };
+
+  const responseGoogle = async(response) => {
+    //console.log(response.tokenId);
+    const body = {
+      token: response.tokenId
+    };
+    createFetch(url + "users/signin/google",body);
+  
+  };
+  const responseFacebook = (response) => {
+    console.log(response.accessToken);
+    const body = {
+      
+      accessToken:response.accessToken,
+      userID :response.userID
     };
     
-    const res =await fetch(url+'users/signin',
-    {
-      method: "POST",
-      
-      headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(body)
-    })
-    .then((res) => res.json())
-    .then(result =>{ 
-   //  setSuccess(true);
-  // /console.log(result.token);
-  
-   localStorage.setItem('token',JSON.stringify(result.token));
-   localStorage.setItem('id',JSON.stringify(result.user.id));
-   localStorage.setItem('username',JSON.stringify(result.username));
-   console.log('Signin id:'+JSON.parse(localStorage.getItem('id')));
-   console.log(localStorage.setItem('token',JSON.stringify(result.token)));
-   history.push('/app');
- })
-     .catch((err) => {setSuccess(false); console.log('error aa')})
- }
+    createFetch(url + "users/signin/facebook",body);
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -109,8 +143,7 @@ export default function SignIn() {
             name="username"
             autoComplete="username"
             autoFocus
-            onChange={e=>setUserName(e.target.value)}
-
+            onChange={(e) => setUserName(e.target.value)}
           />
           <TextField
             variant="outlined"
@@ -122,14 +155,13 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
-            onChange={ e=> setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
           <Button
-            
             fullWidth
             variant="contained"
             color="primary"
@@ -145,12 +177,34 @@ export default function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
           </Grid>
         </form>
+        <GoogleLogin
+          clientId="718820147204-d08vqnq79hnapbjv3099umi363a7bf5k.apps.googleusercontent.com"
+          buttonText="Login"
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
+          cookiePolicy={"single_host_origin"}
+        />
+        <FacebookLogin
+          appId="1156392861430294"
+          autoLoad={true}
+          fields="name,email,picture"
+          //onClick={componentClicked}
+          callback={responseFacebook} />,
+          {/* <FacebookLogin
+    appId="1156392861430294"
+    autoLoad={true}
+    fields="name,email,picture"
+    callback={responseFacebook}
+    cssClass="my-facebook-button-class"
+    icon="fa-facebook"
+  />, */}
+          
       </div>
       <Box mt={8}>
         <Copyright />

@@ -1,5 +1,5 @@
-import React,{ useState } from 'react';
-import { BrowserRouter, Route, Link, Router,Switch } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import MenuAppBar from '../Bar/bar';
 import SignIn from '../Signin/signin';
 import SignUp from "../Signup/signup"
