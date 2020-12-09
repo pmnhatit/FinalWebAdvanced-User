@@ -193,7 +193,7 @@ export default function SignIn() {
         />
         <FacebookLogin
           appId="1156392861430294"
-          autoLoad={true}
+          //autoLoad={true}
           fields="name,email,picture"
           //onClick={componentClicked}
           callback={responseFacebook} />,
