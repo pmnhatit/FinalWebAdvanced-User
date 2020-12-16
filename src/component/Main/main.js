@@ -6,11 +6,12 @@ import SignUp from "../Signup/signup"
 import App from "../../App"
 import OnlineUser from '../onlineUser'
 import Homepage from '../Homepage/homepage'
+import MatchHistory from '../MatchHistory/matchHistory'
 
 export default function Main()
 {   
-    // localStorage.setItem('backend',`https://apiuser-caro.herokuapp.com/`);
-    localStorage.setItem('backend',`http://localhost:5000/`);
+    localStorage.setItem('backend',`https://apiuser-caro.herokuapp.com/`);
+    // localStorage.setItem('backend',`http://localhost:5000/`);
     return(
         <BrowserRouter>
         <MenuAppBar/>
@@ -21,6 +22,7 @@ export default function Main()
             <Route exact path='/' component={SignIn}/>
             <Route path='/app' component={App}/>
             <Route path='/homepage' component={Homepage}/>
+            <Route path='/history' component={MatchHistory}/>
             </Switch>
         </div>
         

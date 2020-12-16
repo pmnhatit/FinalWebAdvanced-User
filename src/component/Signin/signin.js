@@ -58,6 +58,8 @@ const saveLocalStorage = (result) => {
   localStorage.setItem("id", JSON.stringify(result.user._id));
   localStorage.setItem("username", JSON.stringify(result.user.username));
   localStorage.setItem("name", JSON.stringify(result.user.name));
+  localStorage.setItem("user", JSON.stringify(result.user));
+  // console.log(JSON.parse(localStorage.getItem('user')));
 };
 
 
