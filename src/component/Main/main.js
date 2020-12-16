@@ -5,11 +5,12 @@ import SignIn from '../Signin/signin';
 import SignUp from "../Signup/signup"
 import App from "../../App"
 import OnlineUser from '../onlineUser'
+import Homepage from '../Homepage/homepage'
 
 export default function Main()
 {   
-    localStorage.setItem('backend',`https://apiuser-caro.herokuapp.com/`);
-    
+    // localStorage.setItem('backend',`https://apiuser-caro.herokuapp.com/`);
+    localStorage.setItem('backend',`http://localhost:5000/`);
     return(
         <BrowserRouter>
         <MenuAppBar/>
@@ -17,8 +18,9 @@ export default function Main()
             <Switch>
             <Route  path='/signup' component={SignUp}/>
             <Route  path='/online' component={OnlineUser}/>
-            <Route  path='/signin' component={SignIn}/>
+            <Route exact path='/' component={SignIn}/>
             <Route path='/app' component={App}/>
+            <Route path='/homepage' component={Homepage}/>
             </Switch>
         </div>
         

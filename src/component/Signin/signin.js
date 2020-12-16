@@ -57,6 +57,7 @@ const saveLocalStorage = (result) => {
   localStorage.setItem("token", JSON.stringify(result.token));
   localStorage.setItem("id", JSON.stringify(result.user._id));
   localStorage.setItem("username", JSON.stringify(result.user.username));
+  localStorage.setItem("name", JSON.stringify(result.user.name));
 };
 
 
@@ -86,7 +87,7 @@ export default function SignIn() {
       saveLocalStorage(result);
       console.log(result.user.name);
       socket.emit("onlineUser",result.user.name);
-      history.push('/online');
+      history.push('/homepage');
     
     })
     .catch((err) => {
