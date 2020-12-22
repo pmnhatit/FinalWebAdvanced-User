@@ -7,10 +7,11 @@ import App from "../../App"
 import OnlineUser from '../onlineUser'
 import Homepage from '../Homepage/homepage'
 import MatchHistory from '../MatchHistory/matchHistory'
+import TableOnline from '../TableOnline/TableOnline'
 
 export default function Main()
 {   
-    localStorage.setItem('backend',`https://apiuser-caro.herokuapp.com/`);
+     localStorage.setItem('backend',`https://apiuser-caro.herokuapp.com/`);
     // localStorage.setItem('backend',`http://localhost:5000/`);
     return(
         <BrowserRouter>
@@ -23,6 +24,7 @@ export default function Main()
             <Route path='/app' component={App}/>
             <Route path='/homepage' component={Homepage}/>
             <Route path='/history' component={MatchHistory}/>
+            <Route path='/tableonline' component={TableOnline}/>
             </Switch>
         </div>
         

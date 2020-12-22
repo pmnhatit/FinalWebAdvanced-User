@@ -9,6 +9,7 @@ function Homepage() {
     const [friend,setFriend]=useState("vao phong");
     const [roomInfo, setRoomInfo] = useState(null);
     const [idRoom,setIDRoom]=useState(0);
+    const [disabled,setDisabled]=useState(false);
 
 
     socket.removeAllListeners();
@@ -35,7 +36,7 @@ function Homepage() {
             <center>
                
                 <div >
-                    <Button variant="contained" onClick={(e)=>findRival(e)}>{rival}</Button>
+                    <Button variant="contained" onClick={(e)=>findRival(e)} disabled={disabled}>{rival}</Button>
                     <TextField
                         autoFocus
                         margin="dense"
@@ -45,7 +46,7 @@ function Homepage() {
                         onChange={handleChange} fullWidth
 
                     />
-                     <Button onClick={(e)=>handleSubmit(e)} color="primary">
+                     <Button onClick={(e)=>handleSubmit(e)} color="primary"  disabled={disabled}>
                         {friend}
                     </Button>
                    
@@ -55,24 +56,28 @@ function Homepage() {
     }
     function findRival(e) {
         setRival(".... Dang tim doi thu ....")
-        e.target.disabled = true;
+        setDisabled(true);
         const data={
             name:JSON.parse(localStorage.getItem('name')),
             id: JSON.parse(localStorage.getItem('id'))
         }
+        
         socket.emit('joinroom', data);
+        socket.emit('tableonline');
     }
     function handleChange(event) {
         setIDRoom(event.target.value);
     }
     function handleSubmit(e){
         setFriend(".... Cho ban ....");
-        e.target.disabled=true;
+        setDisabled(true);
         const data={
             name:JSON.parse(localStorage.getItem('name')),
             id :idRoom
         }
+       
         socket.emit('joinroom_friend',data );
+        socket.emit('tableonline');
     }
 }
 
