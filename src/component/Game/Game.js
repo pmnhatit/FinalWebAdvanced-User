@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -10,8 +10,10 @@ import checkWin from './services'
 import Config from '../Constant/configs'
 import socket from '../socket.io'
 import {Button} from "@material-ui/core";
+import { Context } from "../Constant/context";
 function Game(props) {
 
+    const [context, setContext] = useContext(Context);
     const [history, setHistory] = useState([
         {
             squares: Array(Config.brdSize * Config.brdSize).fill(null)
@@ -22,13 +24,14 @@ function Game(props) {
     const [winCells, setWinCell] = useState(null);
     const [stepNumber, setstepNumber] = useState(0);
     const [accendingMode, setAccending] = useState(false);
-    setupSocket();
+    // setupSocket();
     socket.off('move');
     socket.on('move', function (data) {
         handleClick(data);
     });
 
     const handleClick = (i) => {
+        console.log("click 2");
         const history2 = history.slice(0, stepNumber + 1);
 
         const current = history2[history2.length - 1];
@@ -62,25 +65,30 @@ function Game(props) {
         }
     }
 
-    const ourname = localStorage.getItem('name');
-    let name = ourname.slice(1, ourname.length - 1);
-    name = JSON.stringify(name);
-    const room = JSON.stringify(props.roomInfo.playerX);
-    var isPlayerX = name === room;
+    const ourname = context.name;
+    const room = props.roomInfo.playerX;
+    var isPlayerX = ourname === room;
+
+    const nameO=context.name;
+    const roomO=props.roomInfo.playerO;
+   
+    var isPlayerO=nameO===roomO;
+    
     function userClick(i) {
         // Prevent user click if rival is disconnected
         // if (needToDisable) {
         //     return;
         // }
-
         // Prevent user click if not his turn
         if ((isPlayerX && !nextMove) || (!isPlayerX && nextMove)) {
             return;
         }
-
+        if((isPlayerX && nextMove)||(isPlayerO && !nextMove)){
+            handleClick(i);
+            socket.emit('move', i);
+        }
         // Send move to server if it is valid
-        handleClick(i);
-        socket.emit('move', i);
+       
 
     }
 
@@ -157,14 +165,14 @@ function Game(props) {
         socket.emit("infoWinner",data);
     }
 
-    function setupSocket() {
-        socket.off('move');
-        socket.on('move', function (data) {
-            handleClick(data);
-        });
+    // function setupSocket() {
+    //     socket.off('move');
+    //     socket.on('move', function (data) {
+    //         handleClick(data);
+    //     });
 
 
-    }
+    // }
     function requestUndo(stepNumber) {
 
         // if (stepNumber === 0) {

@@ -1,94 +1,67 @@
 import React, { useState } from 'react';
-import {Button,TextField} from "@material-ui/core";
-import ScreenGame from '../ScreenGame/screengame'
-import {Chat} from '../Chatroom/Chat/chat'
-import socket from '../socket.io'
-
-function Homepage() {
-    const [rival,setRival]=useState("tim doi thu");
-    const [friend,setFriend]=useState("vao phong");
-    const [roomInfo, setRoomInfo] = useState(null);
-    const [idRoom,setIDRoom]=useState(0);
-    const [disabled,setDisabled]=useState(false);
-
-
-    socket.removeAllListeners();
-    socket.on('joinroom-success', function (roomInfo) {
-        socket.joinroom = true;
-        // console.log(roomInfo);
-        setRoomInfo(roomInfo);
-    });
-    // socket.on('joinroom-success-ai', function (roomInfo) {
-    //     socket.joinroom = true;
-    //     actions.actionJoinRoom(roomInfo);
-    //     actions.actionResetGame(Config.oPlayer);
-    // });
-
-    // If found a rival, start game
-    if (roomInfo) {
-         return <ScreenGame roomInfo={roomInfo} />
-        //  return <Chat  />
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
+import OnlineUser from '../onlineUser' ;
+import Homepage_game from './homepage_game'
+import TableOnline from '../TableOnline/tableonline'
+import {Button,colors,TextField} from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+import {useParams} from "react-router-dom";
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+        // maxWidth: 752,
+        justifyContent: 'space-between',
+        margin: 5,
+        marginRight: 30
+    },
+    title: {
+        marginTop: theme.spacing(5),
+    },
+    itemright:{
+       display:"flex",
+       flexDirection:'row',
+       justifyContent:'space-between'
        
+    },
+    
+}));
+
+export default function InteractiveList(props) {
+    const classes = useStyles();
+    const [addwell,setWell]=useState(false);
+    const [addimprove,setImprove]=useState(false);
+    const [addaction,setAction]=useState(false);
+    let { id } = useParams(); 
+    const history = useHistory();
+    const handeClick=()=>{
+        history.push('/game');
     }
-    // Choose to play with AI or other user
-    else {
-        return (
-            <center>
+    return (
+        <div className={classes.root}>
+            <Grid container spacing={2} className={classes.root}>
+                <Grid item xs={4} >
+                    <div>
+                        <OnlineUser/>
+                    </div>
+                </Grid>
+                <Grid item xs={6} >
                
-                <div >
-                    <Button variant="contained" onClick={(e)=>findRival(e)} disabled={disabled}>{rival}</Button>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Email Address"
-                        type="email"
-                        onChange={handleChange} fullWidth
-
-                    />
-                     <Button onClick={(e)=>handleSubmit(e)} color="primary"  disabled={disabled}>
-                        {friend}
+                    <div >
+                        <TableOnline/>
+                    </div>
+                </Grid>
+                <Grid item xs={2} >
+                    <div className={classes.title} >
+                    <Button onClick={handeClick}>
+                        Chơi game
                     </Button>
-                   
-                </div>
-            </center>
-        );
-    }
-    function findRival(e) {
-        setRival(".... Dang tim doi thu ....")
-        setDisabled(true);
-        const data={
-            name:JSON.parse(localStorage.getItem('name')),
-            id: JSON.parse(localStorage.getItem('id'))
-        }
-        
-        socket.emit('joinroom', data);
-        socket.emit('tableonline');
-    }
-    function handleChange(event) {
-        setIDRoom(event.target.value);
-    }
-    function handleSubmit(e){
-        setFriend(".... Cho ban ....");
-        setDisabled(true);
-        const data={
-            name:JSON.parse(localStorage.getItem('name')),
-            id :idRoom
-        }
-       
-        socket.emit('joinroom_friend',data );
-        socket.emit('tableonline');
-    }
+                    </div>
+                </Grid>
+            </Grid>
+        </div>
+    );
 }
-
-// If first time enter, this make sure not call a loop request
-
-
-
-
-
-
-
-
-
-export default Homepage;

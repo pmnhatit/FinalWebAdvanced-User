@@ -4,7 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
-
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import socket from '../socket.io'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         // maxWidth: 752,
         justifyContent: 'space-between',
+        alignItems:"center",
         margin: 5,
         marginRight: 30
     },
@@ -38,10 +40,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function InteractiveList(props) {
     const classes = useStyles();
-    const [listPlay, setListPlay] = useState([]);
+    const [listPlay, setListPlay] = useState(["abc"]);
     const [listWait, setListWait] = useState([]);
 
     useEffect(() => {
+        socket.emit('tableonline');
         socket.on('tableonline_play', (tableonline) => {
             setListPlay(tableonline);
         });
@@ -59,7 +62,7 @@ export default function InteractiveList(props) {
                 <Grid item xs={6} >
                     <div className={classes.itemright}>
                         <Typography variant="h6" className={classes.title}>
-                            Danh sách bàn đang chơi
+                            Bàn đang chơi
                     </Typography>
                     </div>
                     <div>
@@ -67,13 +70,13 @@ export default function InteractiveList(props) {
                         <>
                       <ListItemText
                       primary={item} />
-                      {/* <IconButton >
+                      <IconButton >
                         <EditIcon />
                       </IconButton>
               
                     <IconButton >
                       <DeleteIcon />
-                    </IconButton> */}
+                    </IconButton>
                     </>
                     ))}
                     </div>
@@ -81,7 +84,7 @@ export default function InteractiveList(props) {
                 <Grid item xs={6} >
                     <div className={classes.itemright}>
                         <Typography variant="h6" className={classes.title}>
-                            Danh sách bàn đang chờ
+                            Bàn đang chờ
                     </Typography>
 
                     </div>

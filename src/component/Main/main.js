@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{ useState, useEffect ,useContext} from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import MenuAppBar from '../Bar/bar';
 import SignIn from '../Signin/signin';
@@ -6,11 +6,15 @@ import SignUp from "../Signup/signup"
 import App from "../../App"
 import OnlineUser from '../onlineUser'
 import Homepage from '../Homepage/homepage'
+import Game from '../Homepage/homepage_game'
 import MatchHistory from '../MatchHistory/matchHistory'
-import TableOnline from '../TableOnline/TableOnline'
-
+import TableOnline from '../TableOnline/tableonline'
+import SettingRoom from '../Room/settingroom'
+import ScreenGame from '../ScreenGame/screengame'
+import { Context } from "../Constant/context";
 export default function Main()
 {   
+    const [context, setContext] = useState("default context value");
      localStorage.setItem('backend',`https://apiuser-caro.herokuapp.com/`);
     // localStorage.setItem('backend',`http://localhost:5000/`);
     return(
@@ -18,13 +22,18 @@ export default function Main()
         <MenuAppBar/>
         <div className="main-route-place">
             <Switch>
+            <Context.Provider value={[context, setContext]}>
             <Route  path='/signup' component={SignUp}/>
             <Route  path='/online' component={OnlineUser}/>
             <Route exact path='/' component={SignIn}/>
             <Route path='/app' component={App}/>
-            <Route path='/homepage' component={Homepage}/>
+            <Route path='/homepage' component={Game}/>
             <Route path='/history' component={MatchHistory}/>
             <Route path='/tableonline' component={TableOnline}/>
+            <Route path='/settingroom' component={SettingRoom}/>
+            <Route path='/screengame' component={ScreenGame}/>
+            {/* <Route path='/game' component={Game}/> */}
+            </Context.Provider>
             </Switch>
         </div>
         

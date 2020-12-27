@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
 import FacebookLogin from 'react-facebook-login';
@@ -17,6 +17,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import socket from '../socket.io'
+import { Context } from "../Constant/context";
 
 
 function Copyright() {
@@ -52,27 +53,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const saveLocalStorage = (result) => {
+// const saveLocalStorage = (result) => {
   
-  localStorage.setItem("token", JSON.stringify(result.token));
-  localStorage.setItem("id", JSON.stringify(result.user._id));
-  localStorage.setItem("username", JSON.stringify(result.user.username));
-  localStorage.setItem("name", JSON.stringify(result.user.name));
-  localStorage.setItem("user", JSON.stringify(result.user));
-  // console.log(JSON.parse(localStorage.getItem('user')));
-};
+//   localStorage.setItem("token", JSON.stringify(result.token));
+//   localStorage.setItem("id", JSON.stringify(result.user._id));
+//   localStorage.setItem("username", JSON.stringify(result.user.username));
+//   localStorage.setItem("name", JSON.stringify(result.user.name));
+//   localStorage.setItem("user", JSON.stringify(result.user));
+
+//   // console.log(JSON.parse(localStorage.getItem('user')));
+// };
 
 
 
 export default function SignIn() {
   const classes = useStyles();
   const history = useHistory();
+  const [context, setContext] = useContext(Context);
   const url = localStorage.getItem("backend");
   const [success, setSuccess] = useState(true);
 
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-
+  let once_time=0;
+  socket.emit('disconnect');
   const createFetch = async (linkUrl, body)=>
 {
   const res = await fetch(linkUrl, {
@@ -88,7 +92,11 @@ export default function SignIn() {
       //console.log(result);
       saveLocalStorage(result);
       console.log(result.user.name);
-      socket.emit("onlineUser",result.user.name);
+      if(once_time===0){
+        socket.emit("onlineUser",result.user.name);
+        once_time++;
+      }
+    
       history.push('/homepage');
     
     })
@@ -125,6 +133,16 @@ export default function SignIn() {
     
     createFetch(url + "users/signin/facebook",body);
   }
+  const saveLocalStorage = (result) => {
+  
+    localStorage.setItem("token", JSON.stringify(result.token));
+    localStorage.setItem("id", JSON.stringify(result.user._id));
+    localStorage.setItem("username", JSON.stringify(result.user.username));
+    localStorage.setItem("name", JSON.stringify(result.user.name));
+    localStorage.setItem("user", JSON.stringify(result.user));
+    setContext({id:result.user._id,username:result.user.username,name:result.user.name,user:result.user})
+    // console.log(JSON.parse(localStorage.getItem('user')));
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -215,4 +233,5 @@ export default function SignIn() {
       </Box>
     </Container>
   );
+
 }
