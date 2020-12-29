@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import  { useEffect } from "react";
 // import clsx from 'clsx';
 // import moment from 'moment';
 import { v4 as uuid } from 'uuid';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import { Context } from "../Constant/context";
 import PropTypes from 'prop-types';
 import {
   Box,
@@ -36,8 +37,11 @@ const useStyles = makeStyles(() => ({
 export default function MatchHistory() {
   const classes = useStyles();
   // const [orders] = useState(data);
-  const user = JSON.parse(localStorage.getItem('user'));
-  const token=JSON.parse(localStorage.getItem('token'));
+  const [context, setContext] = useContext(Context);
+  // const user = JSON.parse(localStorage.getItem('user'));
+  // const token=JSON.parse(localStorage.getItem('token'));
+  const user=context.user;
+  const token =context.token;
   const url = localStorage.getItem("backend");
   const [success, setSuccess] = useState(true);
   const [data, setData]=useState([{_id: "5fd98a90fea29a4868ed1953", player_id: "null", enemy: "a", date: "dd/mm/yyyy", status: "null"}]);

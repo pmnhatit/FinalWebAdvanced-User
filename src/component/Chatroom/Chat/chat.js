@@ -20,6 +20,7 @@ export const Chat = (props) => {
   const [context, setContext] = useContext(Context);
 
   const ENDPOINT = 'http://localhost:5000/';
+  // console.log(props.roomInfo);
   
 
   useEffect(() => {
