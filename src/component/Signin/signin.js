@@ -96,7 +96,6 @@ export default function SignIn() {
         socket.emit("onlineUser",result.user.name);
         once_time++;
       }
-    
       history.push('/homepage');
     
     })
@@ -107,7 +106,7 @@ export default function SignIn() {
 }
 
   const handlerLogin = async (e) => {
-    console.log("handlerLogin");
+    
     const body = {
       username: userName,
       password: password,
@@ -140,7 +139,7 @@ export default function SignIn() {
     localStorage.setItem("username", JSON.stringify(result.user.username));
     localStorage.setItem("name", JSON.stringify(result.user.name));
     localStorage.setItem("user", JSON.stringify(result.user));
-    setContext({id:result.user._id,username:result.user.username,name:result.user.name,user:result.user})
+    setContext({id:result.user._id,username:result.user.username,name:result.user.name,user:result.user,token:result.token})
     // console.log(JSON.parse(localStorage.getItem('user')));
   };
 

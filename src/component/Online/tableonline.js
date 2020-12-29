@@ -52,7 +52,7 @@ export default function InteractiveList(props) {
             setListWait(tableonline);
 
         });
-        return () => socket.disconnect();
+        // return () => socket.disconnect();
 
     }, []);
     return (

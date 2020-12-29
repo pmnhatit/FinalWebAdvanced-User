@@ -1,5 +1,5 @@
 import React, { useState,useContext } from 'react';
-import { Button, TextField } from "@material-ui/core";
+import { Button, DialogContentText, TextField } from "@material-ui/core";
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -93,7 +93,8 @@ function SettingRoom() {
         console.log("pass_room ", pass_room);
         const room = {
             name: context.name,
-            id: name,
+            id_room:name,
+            id_player: context.id,
             pass: pass_room,
             time: time
         }

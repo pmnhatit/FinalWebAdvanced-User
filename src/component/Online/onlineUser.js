@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -6,11 +6,12 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import VisibilityIcon from '@material-ui/icons/Visibility'; 
 import SendIcon from '@material-ui/icons/Send';
-import socket from './socket.io'
+import socket from '../socket.io'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-
+import { Context } from "../Constant/context";
+import ItemUser from './itemonlineuser'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,20 +41,20 @@ export default function OnlineUser() {
   const classes = useStyles();
   const [response, setResponse] = useState('');
     const [onlineUsers, setOnlineUsers] = useState([]);
+    const [context, setContext] = useContext(Context);
   
-    socket.emit("onlineUser");
-    useEffect(() => {
-      // const socket = socketIOClient(ENDPOINT);
-      socket.on('FromAPI', (data) => {
-        setResponse(data);
-      });
+    
+ 
+    // useEffect(() => {
+      
+      socket.off('onlineUserServer');
       socket.on('onlineUserServer', (arrayNameOnline) => {
           console.log("online ", arrayNameOnline);
        let temp=[];
         arrayNameOnline.forEach(element => {
   
-          temp.push(element.name);
-  
+          temp.push(element);
+
         });
   
         setOnlineUsers(temp);
@@ -62,12 +63,19 @@ export default function OnlineUser() {
         // setOnlineUsers(users);
         // console.log(onlineUsers);
       });
-      return () => socket.disconnect();
-    }, []);
+      // return () => socket.disconnect();
+    // }, []);
     const onlineUsersList = onlineUsers.map((onlineUser) => (
-      <li>{onlineUser}</li>
+      <li>{onlineUser.name}</li>
     ));
-  
+    const handleInvite=()=>{
+      console.log("click invite")
+      const data={
+        nameSend:context.name,
+        id_player:context.id
+      }
+      socket.emit('request',data);
+    }
     return (
         
         <div className={classes.root}>
@@ -81,15 +89,8 @@ export default function OnlineUser() {
                     <div>
                     {onlineUsers.map((item) => (
                          <div className={classes.itemright}>
-                      <ListItemText
-                      primary={item} />
-                      <IconButton >
-                        <VisibilityIcon />
-                      </IconButton>
-              
-                    <IconButton >
-                      <SendIcon />
-                    </IconButton>
+                     <ItemUser idsocket={item.id} name={item.name}
+                     />
                     </div>
                     ))}
                     </div>

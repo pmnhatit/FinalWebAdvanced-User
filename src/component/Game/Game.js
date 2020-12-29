@@ -27,11 +27,10 @@ function Game(props) {
     // setupSocket();
     socket.off('move');
     socket.on('move', function (data) {
-        handleClick(data);
+        handleClick(data.i);
     });
 
     const handleClick = (i) => {
-        console.log("click 2");
         const history2 = history.slice(0, stepNumber + 1);
 
         const current = history2[history2.length - 1];
@@ -57,14 +56,12 @@ function Game(props) {
             const XorO = nextMove ? "X" : "O";
 
             const _winCells = checkWin(i, XorO, history2.length - 1, _history);
-            console.log(_winCells);
             setstepNumber(history2.length);
             setNextMove(!nextMove);
             setWinCell(_winCells.winCells);
             setWinner(_winCells.user);
         }
     }
-
     const ourname = context.name;
     const room = props.roomInfo.playerX;
     var isPlayerX = ourname === room;
@@ -85,7 +82,11 @@ function Game(props) {
         }
         if((isPlayerX && nextMove)||(isPlayerO && !nextMove)){
             handleClick(i);
-            socket.emit('move', i);
+            const data={
+                i,
+                nextMove:nextMove
+            }
+            socket.emit('move', data);
         }
         // Send move to server if it is valid
        

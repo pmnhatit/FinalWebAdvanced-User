@@ -6,6 +6,8 @@ import socket from '../socket.io'
 import {Link} from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Context } from "../Constant/context";
+import Invite from '../Notification/inviteNotification'
+
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(5),
@@ -32,7 +34,18 @@ function Homepage() {
     const [disabled,setDisabled]=useState(false);
     const [context, setContext] = useContext(Context);
 
-    socket.removeAllListeners();
+    const [sender,setSender]=useState('');
+    const [idSender,setIdSender]=useState('');
+    const [idsocket_sender,setIdsocketSender]=useState('');
+
+    const [open, setOpen] = useState(false);
+    function closeDialog(){
+        setOpen(!open);
+      }
+    
+    // socket.removeAllListeners();
+    
+    // socket.emit("onlineUser",context.name);
     socket.on('joinroom-success', function (roomInfo) {
         socket.joinroom = true;
         console.log(roomInfo);
@@ -41,6 +54,16 @@ function Homepage() {
     socket.on('no-room',(data)=>{
         alert("Không tìm thấy phòng");
     })
+    socket.on('invite',(data)=>{
+        setSender(data.name);
+        setIdSender(data.idsender); 
+        setIdsocketSender(data.idsocket_sender);
+        setOpen(true);
+       
+       
+    })
+    
+    
     // socket.on('joinroom-success-ai', function (roomInfo) {
     //     socket.joinroom = true;
     //     actions.actionJoinRoom(roomInfo);
@@ -57,8 +80,10 @@ function Homepage() {
     else {
         return (
            
-               
+          
                 <div className={classes.paper} >
+                      <Invite open={open} closeDialog={closeDialog} sender={sender} 
+             idsender={idSender} idsocket_sender={idsocket_sender}/>
                     <Button variant="contained" onClick={(e)=>findRival(e)} disabled={disabled}>{rival}</Button>
                     <Link to={`/settingroom`}>
                         <div className={classes.margin_top}>
@@ -88,7 +113,13 @@ function Homepage() {
                      <Button onClick={handleSubmit}>
                         Tham gia phòng
                     </Button>
-                   
+                    <Link to={`/waitingroom`}>
+                        <div className={classes.margin_top}>
+                    <Button onClick={()=>socket.emit('onlineUser')}>
+                        Mời người chơi online
+                    </Button>
+                    </div>
+                    </Link>
                    
                 </div>
           
@@ -99,7 +130,8 @@ function Homepage() {
         setDisabled(true);
         const data={
             name: context.name,
-            id: context.id,
+            id_room: context.id,
+            id_player:context.id,
             pass: '0',
             time: 10
         }
@@ -118,7 +150,8 @@ function Homepage() {
         console.log("pass ",pass);
         const data={
             name: context.name,
-            id: idRoom,
+            id_player:context.id,
+            id_room: idRoom,
             pass: pass,
             time: 10
         }
