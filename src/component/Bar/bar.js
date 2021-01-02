@@ -45,7 +45,13 @@ export default function MenuAppBar() {
   };
   const handleHistory=()=>
   {
+    handleClose();
     history.push('/history');
+  }
+  const handleProfile=()=>
+  {
+    handleClose();
+    history.push('/profile');
   }
 
   return (
@@ -101,7 +107,7 @@ export default function MenuAppBar() {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleProfile}>Profile</MenuItem>
                 <MenuItem onClick={handleHistory} >Match History</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
               </Menu>

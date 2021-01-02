@@ -65,7 +65,7 @@ export default function MatchHistory() {
     .then((result) => {
       console.log(result);
       setData(result);
-      //console.log(data);
+      console.log(data);
     })
     .catch((err) => {
       setSuccess(false);
