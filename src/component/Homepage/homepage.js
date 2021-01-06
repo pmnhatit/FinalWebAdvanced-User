@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/Add';
+
 import OnlineUser from '../Online/onlineUser' ;
-import Homepage_game from './homepage_game'
+
 import TableOnline from '../Online/tableonline'
 import {Button,colors,TextField} from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import {useParams} from "react-router-dom";
 import socket from '../socket.io'
 import Invite from '../Notification/inviteNotification'
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,17 +39,32 @@ export default function InteractiveList(props) {
     const [addimprove,setImprove]=useState(false);
     const [addaction,setAction]=useState(false);
     const [open, setOpen] = useState(false);
+    const [open1, setOpen1] = useState(false);
     const [sender,setSender]=useState('');
     const [idSender,setIdSender]=useState('');
     const [idsocket_sender,setIdsocketSender]=useState('');
 
-    let { id } = useParams(); 
    
+    const name1 =localStorage.getItem('name');
+    const _name=name1.slice(1, name1.length - 1);
+    const id= localStorage.getItem('id');
+    const _id=id.slice(1, id.length - 1);
+    const data={
+      name:_name,
+      id_player:_id
+    }
+    console.log("data",data)
+    socket.emit('onlineUser',data);
     // var socket = io.connect();
 
     function closeDialog(){
         setOpen(!open);
       }
+      function closeDialog1(){
+        setOpen1(!open1);
+      }
+      
+      
       socket.on('invite',(data)=>{
         setSender(data.name);
         setIdSender(data.idsender); 
@@ -63,7 +77,6 @@ export default function InteractiveList(props) {
         history.push('/homepage_game');
     })
     const handeClick=()=>{
-       
         history.push('/homepage_game');
     }
     return (

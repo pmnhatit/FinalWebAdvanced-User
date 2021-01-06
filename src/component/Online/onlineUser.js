@@ -15,12 +15,12 @@ import ItemUser from './itemonlineuser'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1,
+        // flexGrow: 1,
         // maxWidth: 752,
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
         // margin: 5,
-        marginRight: 50,
-        marginLeft:50
+        margin: 5,
+        marginRight: 30
     },
     title: {
         margin: theme.spacing(2, 0, 2),
@@ -42,14 +42,26 @@ export default function OnlineUser() {
   const [response, setResponse] = useState('');
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [context, setContext] = useContext(Context);
+
+    useEffect(() => {
+      const name1 =localStorage.getItem('name');
+      const _name=name1.slice(1, name1.length - 1);
+      const id= localStorage.getItem('id');
+      const _id=id.slice(1, id.length - 1);
+      const data={
+        name:_name,
+        id_player:_id
+      }
+      console.log("data",data)
+      socket.emit('onlineUser',data);
+       }, []);
+
   
-    
  
     // useEffect(() => {
-      
+     
       socket.off('onlineUserServer');
       socket.on('onlineUserServer', (arrayNameOnline) => {
-          console.log("online ", arrayNameOnline);
        let temp=[];
         arrayNameOnline.forEach(element => {
   
@@ -64,16 +76,26 @@ export default function OnlineUser() {
         // console.log(onlineUsers);
       });
       // return () => socket.disconnect();
-    // }, []);
+   
     const onlineUsersList = onlineUsers.map((onlineUser) => (
       <li>{onlineUser.name}</li>
     ));
     const handleInvite=()=>{
       console.log("click invite")
+      //===========localstorage---------------------------
+      const name =localStorage.getItem('name');
+      const _name=name.slice(1, name.length - 1);
+      const id= localStorage.getItem('id');
+      const _id=id.slice(1, id.length - 1);
       const data={
-        nameSend:context.name,
-        id_player:context.id
+        nameSend:_name,
+        id_player:_id
       }
+      //-------------------------------------============ 
+      // const data={
+      //   nameSend:context.name,
+      //   id_player:context.id
+      // }
       socket.emit('request',data);
     }
     return (
@@ -89,7 +111,7 @@ export default function OnlineUser() {
                     <div>
                     {onlineUsers.map((item) => (
                          <div className={classes.itemright}>
-                     <ItemUser idsocket={item.id} name={item.name}
+                     <ItemUser idsocket={item.idsocket} name={item.name}
                      />
                     </div>
                     ))}

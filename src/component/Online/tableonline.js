@@ -10,7 +10,8 @@ import socket from '../socket.io'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-
+import ItemPlay from './itemtableplay'
+import ItemWait from './itemtablewait'
 // import IconButton from '@material-ui/core/IconButton';
 // import DeleteIcon from '@material-ui/icons/Delete';
 // import EditIcon from '@material-ui/icons/Edit';
@@ -21,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         // maxWidth: 752,
-        justifyContent: 'space-between',
-        alignItems:"center",
+        // justifyContent: 'space-between',
+        // alignItems:"center",
         margin: 5,
         marginRight: 30
     },
@@ -40,21 +41,24 @@ const useStyles = makeStyles((theme) => ({
 
 export default function InteractiveList(props) {
     const classes = useStyles();
-    const [listPlay, setListPlay] = useState(["abc"]);
+    const [listPlay, setListPlay] = useState([]);
     const [listWait, setListWait] = useState([]);
 
     useEffect(() => {
         socket.emit('tableonline');
-        socket.on('tableonline_play', (tableonline) => {
-            setListPlay(tableonline);
-        });
-        socket.on('tableonline_wait', (tableonline) => {
-            setListWait(tableonline);
-
-        });
+      
         // return () => socket.disconnect();
 
     }, []);
+    socket.off('tableonline_play');
+    socket.off('tableonline_wait');
+    socket.on('tableonline_play', (tableonline) => {
+        setListPlay(tableonline);
+    });
+    socket.on('tableonline_wait', (tableonline) => {
+        setListWait(tableonline);
+
+    });
     return (
         
         <div className={classes.root}>
@@ -66,19 +70,7 @@ export default function InteractiveList(props) {
                     </Typography>
                     </div>
                     <div>
-                    {listPlay.map((item) => (
-                        <>
-                      <ListItemText
-                      primary={item} />
-                      <IconButton >
-                        <EditIcon />
-                      </IconButton>
-              
-                    <IconButton >
-                      <DeleteIcon />
-                    </IconButton>
-                    </>
-                    ))}
+                    <ItemPlay/>
                     </div>
                 </Grid>
                 <Grid item xs={6} >
@@ -89,19 +81,8 @@ export default function InteractiveList(props) {
 
                     </div>
                     <div >
-                    {listWait.map((item) => (
-                        <>
-                      <ListItemText
-                      primary={item} />
-                      {/* <IconButton >
-                        <EditIcon />
-                      </IconButton>
-              
-                    <IconButton >
-                      <DeleteIcon />
-                    </IconButton> */}
-                    </>
-                    ))}
+                    <ItemWait/>
+                  
                     </div>
                 </Grid>
 

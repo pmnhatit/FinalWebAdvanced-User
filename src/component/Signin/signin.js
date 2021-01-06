@@ -93,7 +93,12 @@ export default function SignIn() {
       saveLocalStorage(result);
       console.log(result.user.name);
       if(once_time===0){
-        socket.emit("onlineUser",result.user.name);
+        const data={
+          name: result.user.name,
+          id_player:result.user._id
+        }
+        socket.emit("onlineUser",data);
+        socket.emit('tableonline');
         once_time++;
       }
       history.push('/homepage');

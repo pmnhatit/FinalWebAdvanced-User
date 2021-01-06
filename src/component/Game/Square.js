@@ -4,8 +4,9 @@ function Square(props) {
     const className = 'square' + (props.highlight ? ' highlight' : '');
     return (
       <button className={className}
-        onClick={props.onClick}>
-        {props.value}
+        onClick={props.onClick}  >
+        {/* {props.value} */}
+         <font color='#00FFFF'>{props.value}</font>
       </button>
     );
   }

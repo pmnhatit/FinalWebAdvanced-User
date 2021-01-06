@@ -27,15 +27,23 @@ export const Chat = (props) => {
     // const { name, room } = queryString.parse(location.search);
 
     // socket = io(ENDPOINT);
-
+    
     setRoom(props.roomInfo.id);
-    setName(context.name)
-
-    socket.emit('join_chat', { name: context.name, room: props.roomInfo.id }, (error) => {
+    
+    // ----------------------localstorage------------------------------------
+    setName(localStorage.getItem('name'));
+    socket.emit('join_chat', { name: localStorage.getItem('name'), room: props.roomInfo.id }, (error) => {
       if (error) {
         alert(error);
       }
     });
+    //----------------------------------------------------------------------------
+    // setName(context.name);
+    // socket.emit('join_chat', { name: context.name, room: props.roomInfo.id }, (error) => {
+    //   if (error) {
+    //     alert(error);
+    //   }
+    // });
   }, []);
   //   }, [ENDPOINT, location.search]);
 
@@ -56,8 +64,6 @@ export const Chat = (props) => {
       socket.emit('sendMessage', message, () => setMessage(''));
     }
   }
-
-
   return (
     <div>
       <div style={{ backgroundColor: "black" }}>

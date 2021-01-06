@@ -38,10 +38,13 @@ export default function MatchHistory() {
   const classes = useStyles();
   // const [orders] = useState(data);
   const [context, setContext] = useContext(Context);
-  // const user = JSON.parse(localStorage.getItem('user'));
-  // const token=JSON.parse(localStorage.getItem('token'));
-  const user=context.user;
-  const token =context.token;
+  //----------------------------------------------
+  const user = JSON.parse(localStorage.getItem('user'));
+  const token=JSON.parse(localStorage.getItem('token'));
+  //-------localstorage-----------------
+  // const user=context.user;
+  // const token =context.token;
+  
   const url = localStorage.getItem("backend");
   const [success, setSuccess] = useState(true);
   const [data, setData]=useState([{_id: "5fd98a90fea29a4868ed1953", player_id: "null", enemy: "a", date: "dd/mm/yyyy", status: "null"}]);

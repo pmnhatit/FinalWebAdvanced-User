@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Context } from "../Constant/context";
 import Invite from '../Notification/inviteNotification'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -39,6 +40,17 @@ function Homepage() {
     const [idsocket_sender,setIdsocketSender]=useState('');
 
     const [open, setOpen] = useState(false);
+
+    const name1 =localStorage.getItem('name');
+    const _name=name1.slice(1, name1.length - 1);
+    const id= localStorage.getItem('id');
+    const _id=id.slice(1, id.length - 1);
+    const data={
+      name:_name,
+      id_player:_id
+    }
+    console.log("data",data)
+    socket.emit('onlineUser',data);
     function closeDialog(){
         setOpen(!open);
       }
@@ -46,11 +58,13 @@ function Homepage() {
     // socket.removeAllListeners();
     
     // socket.emit("onlineUser",context.name);
+ 
     socket.on('joinroom-success', function (roomInfo) {
         socket.joinroom = true;
         console.log(roomInfo);
         setRoomInfo(roomInfo);
     });
+    socket.off('no-room');
     socket.on('no-room',(data)=>{
         alert("Không tìm thấy phòng");
     })
@@ -113,10 +127,10 @@ function Homepage() {
                      <Button onClick={handleSubmit}>
                         Tham gia phòng
                     </Button>
-                    <Link to={`/waitingroom`}>
+                    <Link to={`/homepage`}>
                         <div className={classes.margin_top}>
-                    <Button onClick={()=>socket.emit('onlineUser')}>
-                        Mời người chơi online
+                        <Button onClick={handleBack}>
+                       <ArrowBackIcon/> Trở lại
                     </Button>
                     </div>
                     </Link>
@@ -125,16 +139,33 @@ function Homepage() {
           
         );
     }
+    function handleBack(){
+
+    }
     function findRival(e) {
         setRival(".... Đang tìm đối thủ ....")
         setDisabled(true);
+        //-------localstorage-----------------
+        const name=localStorage.getItem('name');
+        const id =localStorage.getItem('id');
+        const _name=name.slice(1, name.length - 1);
+        const _id=id.slice(1, id.length - 1);
         const data={
-            name: context.name,
-            id_room: context.id,
-            id_player:context.id,
+            name: _name,
+            id_room: _id,
+            id_player:_id,
             pass: '0',
-            time: 10
+            time: 20
         }
+        //------------------------------------
+    
+        // const data={
+        //     name: context.name,
+        //     id_room: context.id,
+        //     id_player:context.id,
+        //     pass: '0',
+        //     time: 10
+        // }
         socket.emit('joinroom_quick', data);
         socket.emit('tableonline');
     }
@@ -148,13 +179,27 @@ function Homepage() {
     function handleSubmit(e){
         console.log("name ",idRoom);
         console.log("pass ",pass);
+        //----------localstorage-----------------
+        const name=localStorage.getItem('name');
+        const id =localStorage.getItem('id');
+        const _name=name.slice(1, name.length - 1);
+        const _id=id.slice(1, id.length - 1);
         const data={
-            name: context.name,
-            id_player:context.id,
+            name: _name,
+            id_player:_id,
             id_room: idRoom,
             pass: pass,
-            time: 10
+            time: 20
         }
+
+        //--------------------------------------
+        // const data={
+        //     name: context.name,
+        //     id_player:context.id,
+        //     id_room: idRoom,
+        //     pass: pass,
+        //     time: 10
+        // }
         console.log(data);
         socket.emit('joinroom', data);
         socket.emit('tableonline');

@@ -9,79 +9,30 @@ import Slide from '@material-ui/core/Slide';
 import socket from '../socket.io';
 import { useHistory } from "react-router-dom";
 import { Context } from '../Constant/context';
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function AlertDialogSlide(props) {
+
   const [open, setOpen] = React.useState(false);
   const [context, setContext] = useContext(Context);
   const history = useHistory();
+  
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
-    const data1={
-      id:props.idsender
-    }
-    socket.emit('cancelroom',data1);
-    console.log("da tu choi");
-    // socket.on('timeout',()=>{
-    //   const data={
-    //     id:props.id_sender
-    //   }
-    //   socket.emit('cancelroom',data);
-    // });
     props.closeDialog();
   };
   const handleAgree=()=>{
-    //------------localstorage--------------
-
-    const name1=localStorage.getItem('name');
-    const _name=name1.slice(1, name1.length - 1);
-    const id=localStorage.getItem('id');
-    const _id=id.slice(1, id.length - 1);
-    const data={
-      id_sender:props.idsender,
-      name_sender:props.sender,
-      name:_name,
-      id_player:_id,
-      pass:props.idsender,
-      idsocket_sender:props.idsocket_sender
-    }
-    
-    //-----------------------------------
-
-
-    // const data={
-    //   id_sender:props.idsender,
-    //   name_sender:props.sender,
-    //   name:context.name,
-    //   id_player:context.id,
-    //   pass:props.idsender,
-    //   idsocket_sender:props.idsocket_sender
-
-    // }
-   
-    socket.emit('accept',data);
-    socket.emit('tableonline');
-    props.closeDialog();
-    history.push('/homepage_game')
+   socket.emit('reconcile_agree')
+   props.closeDialog();
+    history.push('/homepage');
   }
   const handleDisagree=()=>{
-    const data1={
-      id:props.idsender
-    }
-    socket.emit('cancelroom',data1);
-    console.log("da tu choi");
-    // socket.on('timeout',()=>{
-    //   const data={
-    //     id:props.id_sender
-    //   }
-    //   socket.emit('cancelroom',data);
-    // });
+    socket.emit('reconcile_disagree')
     props.closeDialog();
   }
 
@@ -98,7 +49,7 @@ export default function AlertDialogSlide(props) {
         <DialogTitle id="alert-dialog-slide-title">{"Game caro"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            {props.sender} mời bạn chơi game
+           {props.name}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
