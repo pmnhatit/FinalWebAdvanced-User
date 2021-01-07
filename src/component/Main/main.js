@@ -12,8 +12,9 @@ import TableOnline from '../Online/tableonline'
 import SettingRoom from '../Room/settingroom'
 import ScreenGame from '../ScreenGame/screengame'
 import { Context } from "../Constant/context";
-import Profile from '../Profile/profile'
-import changePassword from "../Profile/ChangePassword/changePassword"
+import Profile from '../Profile/profile';
+import changePassword from "../Profile/ChangePassword/changePassword";
+import VerifyAccount from "../VerifyAccount/verifyAccount";
 export default function Main()
 {   
     const [context, setContext] = useState("default context value");
@@ -37,6 +38,7 @@ export default function Main()
             <Route exact path='/homepage_game' component={HomepageGame}/>
             <Route exact path='/profile' component={Profile}/>
             <Route exact path='/changepassword' component={changePassword}/>
+            <Route exact path='/verify-email/:code/:username' component={VerifyAccount}/>
             </Context.Provider>
             </Switch>
         </div>

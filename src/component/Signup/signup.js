@@ -13,6 +13,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import Snackbar from '@material-ui/core/Snackbar';
 
 function Copyright() {
   return (
@@ -57,12 +58,20 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  
+  const [open,setOpen] = useState(false);
+  const [content, setContent] = useState("");
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
 
   const addUser = async () => {
     console.log("add");
     sendaddUser();
-    history.push("/");
+    // history.push("/");
   };
   const sendaddUser = async () => {
     const body = {
@@ -74,7 +83,8 @@ export default function SignUp() {
     };
     console.log(body);
     console.log(1);
-    const res = await fetch(url + `users/signup`, {
+    // const res = await fetch(url + `users/signup`, {
+      const res = await fetch("http://localhost:5000/users/signup", {
       method: "POST",
       mode: "cors",
       headers: {
@@ -82,6 +92,13 @@ export default function SignUp() {
       },
       body: JSON.stringify(body),
     });
+    if(res.status==200){
+      setContent("Please check your email!");
+      setOpen(true);
+    }else{
+      setContent("Something wrong!!!");
+      setOpen(true);
+    }
   };
   return (
     <Container component="main" maxWidth="xs">
@@ -187,6 +204,14 @@ export default function SignUp() {
       <Box mt={5}>
         <Copyright />
       </Box>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center'}}
+        open={open}
+        onClose={handleClose}
+        autoHideDuration={2000}
+        message={content}
+        key={1}
+      />
     </Container>
   );
 }
