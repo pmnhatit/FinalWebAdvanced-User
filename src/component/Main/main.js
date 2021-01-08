@@ -15,6 +15,8 @@ import { Context } from "../Constant/context";
 import Profile from '../Profile/profile';
 import changePassword from "../Profile/ChangePassword/changePassword";
 import VerifyAccount from "../VerifyAccount/verifyAccount";
+import ForgotPassword from "../ForgotPassword/forgotPassword";
+import ResetPassword from "../ResetPassword/resetPassword";
 export default function Main()
 {   
     const [context, setContext] = useState("default context value");
@@ -39,6 +41,8 @@ export default function Main()
             <Route exact path='/profile' component={Profile}/>
             <Route exact path='/changepassword' component={changePassword}/>
             <Route exact path='/verify-email/:code/:username' component={VerifyAccount}/>
+            <Route exact path='/forgot-password' component={ForgotPassword}/>
+            <Route exact path='/reset-password/:username' component={ResetPassword}/>
             </Context.Provider>
             </Switch>
         </div>

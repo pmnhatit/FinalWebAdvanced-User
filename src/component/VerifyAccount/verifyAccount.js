@@ -30,7 +30,7 @@ export default function(){
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(() => {
-    fetch("http://localhost:5000/verify/verify-account",{
+    fetch("https://apiuser-caro.herokuapp.com/verify/verify-account",{
         
         method: 'POST',
         headers: {
