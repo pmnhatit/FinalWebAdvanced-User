@@ -59,7 +59,7 @@ function checkWin(i, user, stepNumber,history) {
         isBlock = false;
     }
     coorX = row;
-    if (isBlock === false && countCol >= 4) 
+    if (isBlock === false && countCol >= 5) 
     return {
         winCells,
         user
@@ -99,7 +99,7 @@ function checkWin(i, user, stepNumber,history) {
     }
     coorY = col;
    
-    if (isBlock === false && countRow >= 4) 
+    if (isBlock === false && countRow >= 5) 
     return {
         winCells,
         user
@@ -144,7 +144,7 @@ function checkWin(i, user, stepNumber,history) {
     }
     coorX = row;
     coorY = col;
-    if (isBlock === false && countMainDiagonal >= 4) 
+    if (isBlock === false && countMainDiagonal >= 5) 
     return {
         winCells,
         user
@@ -187,7 +187,7 @@ function checkWin(i, user, stepNumber,history) {
     if (coorX <= Config.brdSize - 1 && coorY <= Config.brdSize - 1 && squares[t] !== rival) {
         isBlock = false;
     }
-    if (isBlock === false && countSkewDiagonal >= 4) 
+    if (isBlock === false && countSkewDiagonal >= 5) 
     return {
         winCells,
         user

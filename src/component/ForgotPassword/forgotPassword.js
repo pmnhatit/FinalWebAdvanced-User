@@ -53,11 +53,8 @@ export default function SignUp() {
   const history = useHistory();
   const url= localStorage.getItem('backend');
 
-  const [name, setName] = useState("");
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [open,setOpen] = useState(false);
   const [content, setContent] = useState("");
 
@@ -68,23 +65,20 @@ export default function SignUp() {
     setOpen(false);
   };
 
-  const addUser = async () => {
-    console.log("add");
-    sendaddUser();
+  const handleConfirm = async (e) => {
+    e.preventDefault();
+    sendEmail();
     // history.push("/");
   };
-  const sendaddUser = async () => {
+  const sendEmail = async () => {
     const body = {
-      username: userName,
-      password: password,
-      name: name,
-      phone:phone,
-      email:email
+      email:email,
+      username: username
     };
     console.log(body);
     console.log(1);
     // const res = await fetch(url + `users/signup`, {
-      const res = await fetch("https://apiuser-caro.herokuapp.com/users/signup", {
+      const res = await fetch("https://apiuser-caro.herokuapp.com/users/forgot-password", {
       method: "POST",
       mode: "cors",
       headers: {
@@ -96,7 +90,7 @@ export default function SignUp() {
       setContent("Please check your email!");
       setOpen(true);
     }else{
-      setContent("Something wrong!!!");
+      setContent("Username is wrong!");
       setOpen(true);
     }
   };
@@ -108,60 +102,10 @@ export default function SignUp() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Enter your information
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="fname"
-                name="userName"
-                variant="outlined"
-                required
-                fullWidth
-                id="userName"
-                label="UserName"
-                autoFocus
-                onChange={(e)=>setUserName(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={(e)=>setPassword(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="Name"
-                label="Name"
-                name="Name"
-                autoComplete="name"
-                onChange={(e)=>setName(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="Phone"
-                label="Phone"
-                name="Phone"
-                autoComplete="Phone"
-                onChange={(e)=>setPhone(e.target.value)}
-              />
-            </Grid>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -171,14 +115,20 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                autoFocus
                 onChange={(e)=>setEmail(e.target.value)}
               />
             </Grid>
-
             <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
+            <TextField
+                autoComplete="fname"
+                name="userName"
+                variant="outlined"
+                required
+                fullWidth
+                id="userName"
+                label="UserName"
+                onChange={(e)=>setUsername(e.target.value)}
               />
             </Grid>
           </Grid>
@@ -188,17 +138,10 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={addUser}
+            onClick={handleConfirm}
           >
-            Sign Up
+            Confirm
           </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="/" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
       <Box mt={5}>

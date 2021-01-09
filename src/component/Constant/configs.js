@@ -2,7 +2,7 @@ import { Component } from 'react';
 
 class Config extends Component {
     
-    static brdSize = 5;
+    static brdSize = 20;
 
     static xPlayer = 'X';
 
