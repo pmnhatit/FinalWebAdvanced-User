@@ -19,6 +19,8 @@ import { useHistory } from "react-router-dom";
 import Disagree from '../Notification/reconcile_disagree'
 import Surrender from '../Notification/surrender'
 import SurrenderViewer from '../Notification/surrender_view'
+import Winner from '../Notification/winner'
+import WinnerViewer from '../Notification/winner_view'
 const useStyles = makeStyles((theme) => ({
 
     item: {
@@ -54,11 +56,16 @@ function Game(props) {
     const [openButton,setOpenButton]=useState(false);
     const [openDisagree,setOpenDisagree]=useState(false);
     const [openSurrender,setOpenSurrender]=useState(false);
+    const [openWinner,setOpenWinner]=useState(false);
     const [contentDialog,setContentDialog]=useState('abc');
     const [disabled_button,setDisabledButton]=useState(true);
+    const [test,setTest]=useState(0);
     const [time,setTime]=useState(0);
     function closeDialog(){
         setOpen(!open);
+      }
+      function closeDialogWinner(){
+        setOpenWinner(!openWinner);
       }
       function closeDialogButton(){
         setOpenButton(!openButton);
@@ -133,15 +140,18 @@ function Game(props) {
     socket.on('reconcile_agree',(data)=>{
         setOpenButton(true);
         setContentDialog(`Trận đấy kêt thúc.Do ${data} xin hoà`);
+        socket.emit('remove_time',props.roomInfo);
 
     })
     socket.on('reconcile_disagree',()=>{
         setOpenDisagree(true);
+        socket.emit('remove_time',props.roomInfo);
       
     })
     socket.on('reconcile',()=>{
         setContentDialog('Đối thủ muốn xin hòa')
         setOpen(true);
+       
     })
     socket.on('surrender',(name)=>{
         setOpenSurrender(true);
@@ -157,9 +167,14 @@ function Game(props) {
     })
     socket.off('timing_out');
     socket.on('timing_out',(name)=>{
-       
+      
         setOpenSurrender(true);
         setContentDialog(`${name} thua do hết thời gian .Trận đấu kết thúc`);
+    })
+    socket.off('infoWinnerNotification');
+    socket.on('infoWinnerNotification',(name)=>{
+        setOpenWinner(true);
+        setContentDialog(`${name} đã chiến thắng`)
     })
 
     
@@ -203,6 +218,19 @@ function Game(props) {
     for (let i = moveHistory.length - 1; i >= 0; i--) {
         handleClick(moveHistory[i]);
     }
+    // const disable=(winner==null)? true: false;
+    if(winner!=null)
+    {
+        if(test===0){
+            const data = {
+                roomInfo: props.roomInfo.id,
+                winner: winner
+            }
+            const roomInfo=props.roomInfo;
+            socket.emit("infoWinnerNotification", {data,roomInfo});
+            setTest(1);
+        }
+    }
 
 
     //-----------localstorage----------------------
@@ -231,11 +259,7 @@ function Game(props) {
     // var isPlayerO = nameO === roomO;
 
     function userClick(i) {
-        // Prevent user click if rival is disconnected
-        // if (needToDisable) {
-        //     return;
-        // }
-        // Prevent user click if not his turn
+       
         if ((isPlayerX && !nextMove) || (!isPlayerX && nextMove)) {
             return;
         }
@@ -256,54 +280,18 @@ function Game(props) {
 
     }
 
-    const jumpTo = (step) => {
-        // setstepNumber(step);
-        // setxIsNext((step % 2) === 0);
-    }
+   
     const handleSortToggle = () => {
         setAccending(!accendingMode);
     }
     const current = history[stepNumber];
-    // const {row,col}=convert(i);
-    // const winInfo = calculateWinner(current.squares);
-    // const winner = winInfo.winner;
-
-
-    // const moves = history.map((step, move) => {
-    //     const latestMoveSquare = step.latestMoveSquare;
-    //     const col = 1 + latestMoveSquare % Config.brdSize;
-    //     const row = 1 + Math.floor(latestMoveSquare / Config.brdSize);
-    //     const desc = move ?
-    //         `Go to move #${move} (${col}, ${row})` :
-    //         'Go to game start';
-    //     return (
-    //         <li key={move}>
-    //             <button
-    //                 className={move === stepNumber ? 'move-list-item-selected' : ''}
-    //                 onClick={() => requestUndo(move)}>{desc}</button>
-    //         </li>
-    //     );
-    // });
-    // //an nut luu
-    // const disable=(winner==null)? true: false;
-    // if (!accendingMode) {
-    //     moves.reverse();
-    // }
-
-    // let status;
-    // if (winner != null) {
-    //     status = "Winner: " + winner;
-    // } else {
-
-    //     status = "Next player: "
-    //     // + (xIsNext ? "X" : "O");
-
-    //}
+    
 
     return (
         (isPlayerX||isPlayerO)?(
         <div className="game">
-           
+           <Winner open={openWinner} closeDialog={closeDialogWinner} name ={contentDialog} roomInfo={props.roomInfo}
+            isPlayerX={isPlayerX} winner={winner}/>
             <Surrender open={openSurrender}  closeDialog={closeDialogSurrender} name={contentDialog}/>
             <Disagree open={openDisagree}  closeDialog={closeDialogDisagree}/>
           <Reconcile open={open} closeDialog={closeDialog} name={contentDialog}/>
@@ -339,17 +327,15 @@ function Game(props) {
                         Xin Hoà
                     </Button>
                     <Button variant="outlined" onClick={handleSurrender}>Đầu hàng</Button>
-                     <Button onClick={(e) => handleSubmitHistory(e)} color="primary" disabled={disabled_button}>
-                    Thoát trận
-            </Button>
-
+                    
+                     
                 </div>
-
             </div>
         </div>
         )
         :(
             <div className="game">
+               <WinnerViewer open={openWinner} closeDialog={closeDialogWinner} name ={contentDialog} />
              <SurrenderViewer open={openSurrender}  closeDialog={closeDialogSurrender} name={contentDialog}/>
           
             {/* <Disagree open={openDisagree}  closeDialog={closeDialogDisagree}/>
@@ -385,12 +371,19 @@ function Game(props) {
                     playerO: {props.roomInfo.playerO}
                     {checkO}
                 </div>
+                <div className={classes.item}>
+                <Button variant="outlined" color="primary" onClick={handleOutRoom}>
+                    Thoát trận
+                </Button>
+            </div>
                     
             </div>
         </div>
         )
     );
-    
+    function handleOutRoom(){
+        history_router.push('/homepage');
+    }
     function handleReconcile(){
         if(isPlayerO)
         {
@@ -401,6 +394,7 @@ function Game(props) {
         socket.emit('reconcile');
     }
     function handleSurrender(){
+        socket.emit('remove_time',props.roomInfo)
         socket.emit('surrender');
 
     }
@@ -429,9 +423,6 @@ function Game(props) {
         }
         socket.emit("infoWinner", data);
     }
-
-
-
 }
 function convert(i) {
     const col = 1 + i % Config.brdSize;

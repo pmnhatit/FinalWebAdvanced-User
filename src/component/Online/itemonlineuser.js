@@ -21,7 +21,7 @@ export default function ItemOnlineUser(props){
       const _id=id.slice(1, id.length - 1);
 
       const data={
-        nameSender:_name,
+        name:_name,
         id_send: _id,
         idsocket_receive:props.idsocket,
         time:20
@@ -62,9 +62,7 @@ export default function ItemOnlineUser(props){
          <CancelRoom open={open} closeDialog={closeDialog}/>
         <ListItemText 
         primary={props.name} />
-        <IconButton >
-          <VisibilityIcon />
-        </IconButton>
+        
 
       <IconButton onClick={handleInvite} disabled={disabled}>
         <SendIcon />
