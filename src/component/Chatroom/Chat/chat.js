@@ -32,7 +32,7 @@ export const Chat = (props) => {
     
     // ----------------------localstorage------------------------------------
     setName(localStorage.getItem('name'));
-    socket.emit('join_chat', { name: localStorage.getItem('name'), room: props.roomInfo.id }, (error) => {
+    socket.emit('join_chat', { name: localStorage.getItem('name'), room: props.roomInfo.id ,roomInfo:props.roomInfo}, (error) => {
       if (error) {
         alert(error);
       }
@@ -47,8 +47,16 @@ export const Chat = (props) => {
   }, []);
   //   }, [ENDPOINT, location.search]);
 
+  socket.off('oldchat');
+  socket.on('oldchat',(oldchat)=>{
+    for(let i=0;i<oldchat.length;i++){
+      setMessages(msgs => [...msgs, oldchat[i]]);
+    }
+    
+  })
    socket.off('message');
   socket.on('message', message => {
+    console.log("alo lao", message);
     setMessages(msgs => [...msgs, message]);
   });
 
@@ -59,9 +67,9 @@ export const Chat = (props) => {
 
   const sendMessage = (event) => {
     event.preventDefault();
-
+    const roomInfo=props.roomInfo;
     if (message) {
-      socket.emit('sendMessage', message, () => setMessage(''));
+      socket.emit('sendMessage', {message,roomInfo}, () => setMessage(''));
     }
   }
   return (

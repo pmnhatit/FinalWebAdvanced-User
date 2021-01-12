@@ -21,6 +21,7 @@ import Surrender from '../Notification/surrender'
 import SurrenderViewer from '../Notification/surrender_view'
 import Winner from '../Notification/winner'
 import WinnerViewer from '../Notification/winner_view'
+import {Chat} from '../Chatroom/Chat/chat'
 const useStyles = makeStyles((theme) => ({
 
     item: {
@@ -294,7 +295,7 @@ function Game(props) {
             isPlayerX={isPlayerX} winner={winner}/>
             <Surrender open={openSurrender}  closeDialog={closeDialogSurrender} name={contentDialog}/>
             <Disagree open={openDisagree}  closeDialog={closeDialogDisagree}/>
-          <Reconcile open={open} closeDialog={closeDialog} name={contentDialog}/>
+          <Reconcile open={open} closeDialog={closeDialog} name={contentDialog} roomInfo={props.roomInfo}/>
           <ReconcileButton open={openButton} closeDialog={closeDialogButton} name={contentDialog}/>
             {/* <Button onClick={(e) => handleSubmitHistory(e)} color="primary" disabled={disable}>
                 Luu lai
@@ -329,6 +330,9 @@ function Game(props) {
                     <Button variant="outlined" onClick={handleSurrender}>Đầu hàng</Button>
                     
                      
+                </div>
+                <div>
+                <Chat roomInfo={props.roomInfo}/>
                 </div>
             </div>
         </div>
@@ -376,7 +380,9 @@ function Game(props) {
                     Thoát trận
                 </Button>
             </div>
-                    
+            <div>
+                <Chat roomInfo={props.roomInfo}/>
+                </div>
             </div>
         </div>
         )
@@ -394,8 +400,25 @@ function Game(props) {
         socket.emit('reconcile');
     }
     function handleSurrender(){
-        socket.emit('remove_time',props.roomInfo)
-        socket.emit('surrender');
+        socket.emit('remove_time',props.roomInfo);
+        if(isPlayerX){
+            const data={
+                id_winner:props.roomInfo.idplayerO,
+                id_loser:props.roomInfo.idplayerX
+            }
+         
+          
+            socket.emit('surrender',data);
+        }
+        if(isPlayerO){
+            const data={
+                id_winner:props.roomInfo.idplayerX,
+                id_loser:props.roomInfo.idplayerO
+            }
+           
+            socket.emit('surrender',data);
+        }
+       
 
     }
     function handleReady() {

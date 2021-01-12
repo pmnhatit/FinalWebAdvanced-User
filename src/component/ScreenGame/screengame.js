@@ -5,7 +5,7 @@ export default function ScreenGame(props) {
     return(
     <div>
         <Game roomInfo={props.roomInfo}/>
-        <Chat roomInfo={props.roomInfo}/>
+        {/* <Chat roomInfo={props.roomInfo}/> */}
     </div>
     )
 }

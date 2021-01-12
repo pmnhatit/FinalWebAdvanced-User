@@ -27,7 +27,12 @@ export default function AlertDialogSlide(props) {
     props.closeDialog();
   };
   const handleAgree=()=>{
-   socket.emit('reconcile_agree')
+    const data={
+      id_winner: props.roomInfo.idplayerX,
+      id_loser:props.roomInfo.idplayerO
+    }
+   socket.emit('reconcile_agree',data);
+
    props.closeDialog();
     history.push('/homepage');
   }

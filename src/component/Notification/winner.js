@@ -31,10 +31,22 @@ export default function AlertDialogSlide(props) {
   };
   const handleAgree=()=>{
    if(props.isPlayerX && props.winner==='X'){
-       socket.emit('infoWinner',props.winner);
+     const data={
+      winner:props.winner,
+       roomInfo:props.roomInfo.id
+     }
+       socket.emit('infoWinner',data);
+         socket.emit('cancelroom',"1");
+       history.push('/homepage');
    }
    if(props.isPlayerX===false && props.winner==='O'){
-    socket.emit('infoWinner',props.winner);
+    const data={
+      winner:props.winner,
+      roomInfo:props.roomInfo.id
+    }
+    socket.emit('infoWinner',data);
+      socket.emit('cancelroom',"1");
+    history.push('/homepage');
 
    }
     props.closeDialog();
