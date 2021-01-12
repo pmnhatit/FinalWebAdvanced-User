@@ -2,7 +2,7 @@ import React,{ useState,useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
-import {Typography,TextField, Button,Dialog,DialogActions ,DialogContent  ,DialogTitle  } from '@material-ui/core';
+import {Typography,TextField, Button,Dialog,DialogActions ,DialogContent  ,DialogTitle,Avatar  } from '@material-ui/core';
 
 
 
@@ -14,6 +14,11 @@ const useStyles = makeStyles((theme) => ({
       margin: 5,
       marginLeft: 50
   }, 
+  
+  large: {
+    width: theme.spacing(15),
+    height: theme.spacing(15),
+  },
 }));
 export default function Profile() {
     const [success, setSuccess] = useState(true);
@@ -23,13 +28,18 @@ export default function Profile() {
     const user= JSON.parse(localStorage.getItem('user'));
     const token=JSON.parse(localStorage.getItem('token'));
     const [open, setOpen] = React.useState(false);
-    const [profile,setProfile]= useState({_id:"",password:"",username:"",name:"",phone:"",email:"",matches:0,trophies:1000,win_rate:100}); 
+    const [profile,setProfile]= useState({_id:"",image:"https://res.cloudinary.com/dvtm1pjkp/image/upload/v1610119650/sample.jpg",password:"",username:"",name:"",phone:"",email:"",matches:0,trophies:1000,win_rate:100}); 
+    const [fileInput,setFileInput]=useState();
+    const [selectedFile, setSelectedFile]= useState();
+    const [previewSource,setPreviewSource] =useState();
     const [name,setName]= useState();
     const [phone,setPhone]=useState();
     const [refresh,setRefresh]=useState(true);
+    //const [message,setMessage]=useState();
     
 
     useEffect(() => {
+      console.log("aoaoa"+refresh);
       const res =  fetch(url+`profile/${user._id}`, {
         method: "GET",
         mode: "cors",
@@ -41,8 +51,9 @@ export default function Profile() {
       })
         .then((res) => res.json())
         .then((result) => {
+
           setProfile(result);
-          console.log(profile.username);
+          console.log(profile);
         })
         .catch((err) => {
           setSuccess(false);
@@ -52,16 +63,18 @@ export default function Profile() {
 
       const handleChangeProfile=async()=>{
          await updateProfile();
-          setRefresh(!refresh);
+         await setRefresh(!refresh);
+          
           handleClose();
       }
       const updateProfile=async()=>
       {
+          if(!name || !phone)return;
           const body={
             name: name,
             phone: phone
           }
-          const res= fetch(url+`profile/edit/${user._id}`,{
+          const res=  fetch(url+`profile/edit/${user._id}`,{
             method: "POST",
             mode: "cors",
             headers:{
@@ -84,6 +97,50 @@ export default function Profile() {
       const handleClose = () => {
         setOpen(false);
       };
+      const handleFileInputChange=(e)=>
+      {
+        console.log("handleFile");
+          const file = e.target.files[0];
+          previewFile(file);
+      }
+      const previewFile =(file)=>
+      {
+          const reader= new FileReader();
+          reader.readAsDataURL(file);
+          reader.onloadend=()=>
+          {
+            setPreviewSource(reader.result);
+          }
+      } 
+      const handleUpload =async()=>
+      {
+         await updateImage();
+        setRefresh(!refresh);
+      }
+      const updateImage = async()=>
+      { if(!previewSource) return;
+         const body={
+          data:previewSource
+        }
+        const res=await fetch(url+`profile/changeimage/${user._id}`,{
+          method: "POST",
+          mode: "cors",
+          headers:{
+            Authorization: 'Bearer '+`${token}`,
+            'Content-Type': 'application/json',
+          },
+        
+          body:JSON.stringify(body),
+      })
+      .then((res) => res.json())
+      .then(async(result) => {
+        await setProfile(result);
+      })
+      .catch((err)=>
+      {
+        console.log('edit fail')
+      })
+      }
 
   return (
     <div className={classes.root}>
@@ -91,6 +148,17 @@ export default function Profile() {
         Thông tin cá nhân
       </Typography>
       <Grid container spacing={2} >
+        <Grid item xs={12} sm={3}>
+          <Avatar  src={profile.image} className={classes.large} />
+        </Grid>
+        <Grid item xs={12} sm={5}>
+          <input type="file" onChange={handleFileInputChange}></input>
+          <Button variant="contained" onClick={handleUpload} color="primary">Thay đổi ảnh đại diện</Button>
+        </Grid>
+        { previewSource && (
+          <Avatar  src={previewSource} className={classes.large} />
+        )}
+         <Grid item xs={12}></Grid>
         <Grid item xs={12}>
           <TextField
             required
