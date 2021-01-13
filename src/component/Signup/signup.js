@@ -60,7 +60,11 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [open,setOpen] = useState(false);
   const [content, setContent] = useState("");
-
+  const [err,setErr]=useState(false);
+  const [errMess, setErrMess]= useState("");
+  const usernameCheck =  /^[a-zA-Z0-9]+$/;
+  const phoneCheck =  /^[0-9]+$/;
+  const emailCheck=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -73,7 +77,49 @@ export default function SignUp() {
     sendaddUser();
     // history.push("/");
   };
+  const checkUser = async()=>
+  {  //console.log("username is ok: "+!userName.match(usernameCheck));
+    if(userName=="" ||!userName.match(usernameCheck))  
+    { 
+      
+      setContent("Tên đăng nhập rỗng hoặc có kí tự đặc biệt");
+      return false;
+    }
+    if(password=="" )  
+    { 
+      console.log("run");
+      setContent("Mật khẩu rỗng");
+      return false;
+    }
+    if(name=="" ||!name.match(usernameCheck))  
+    { 
+      
+      setContent("Tên người dùng rỗng hoặc có kí tự đặc biệt");
+      return false;
+    }
+    if(phone=="" || !phone.match(phoneCheck))
+    {
+      setContent("Số điện thoại rỗng hoặc có kí tự khác số");
+      return false;
+    }
+    if(email==""|| !email.match(emailCheck))
+    {
+      setContent("Email rỗng hoặc không đúng");
+      return false;
+    }
+    //console.log("true");
+      return true;
+
+  }
   const sendaddUser = async () => {
+    //console.log("send"); 
+    //console.log("check:"+ await checkUser());
+    if(! await checkUser())
+    {   
+        setOpen(true);
+        return false;
+    }
+   
     const body = {
       username: userName,
       password: password,
@@ -81,8 +127,9 @@ export default function SignUp() {
       phone:phone,
       email:email
     };
+    
     console.log(body);
-    console.log(1);
+    //console.log(1);
     // const res = await fetch(url + `users/signup`, {
       const res = await fetch("https://apiuser-caro.herokuapp.com/users/signup", {
       method: "POST",
@@ -93,10 +140,10 @@ export default function SignUp() {
       body: JSON.stringify(body),
     });
     if(res.status==200){
-      setContent("Please check your email!");
+      setContent("Đăng kí thành công .Vui lòng kiểm tra email trước khi đăng nhập!");
       setOpen(true);
     }else{
-      setContent("Something wrong!!!");
+      setContent("Thất bại!!!");
       setOpen(true);
     }
   };
