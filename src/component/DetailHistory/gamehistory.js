@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 function Game() {
     let { id } = useParams();
     const classes = useStyles();
-   
+    const history_router=useHistory();
     const [history, setHistory] = useState([
         {
             squares: Array(Config.brdSize * Config.brdSize).fill(null)
@@ -165,12 +165,18 @@ function Game() {
                     <Button onClick={handleNext}>Next</Button>
                 </div>
                 <div>
+                <Button onClick={handleReturn}>Trở về</Button>
+                </div>
+                <div>
                 <Chat content={chat}/>
                 </div>
             </div>
         </div>
        
     );
+    function handleReturn(){
+        history_router.push('/history');
+    }
     function handleBack(){
         if(clicktime>=0){
             let temp=clicktime;

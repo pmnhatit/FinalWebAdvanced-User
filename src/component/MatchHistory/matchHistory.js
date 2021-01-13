@@ -5,6 +5,7 @@ import  { useEffect } from "react";
 import { v4 as uuid } from 'uuid';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Context } from "../Constant/context";
+import { useHistory } from "react-router-dom";
 import PropTypes from 'prop-types';
 import {
   Box,
@@ -35,6 +36,7 @@ const useStyles = makeStyles(() => ({
 
 
 export default function MatchHistory() {
+  const history=useHistory();
   const classes = useStyles();
   // const [orders] = useState(data);
   const [context, setContext] = useContext(Context);
@@ -77,6 +79,7 @@ export default function MatchHistory() {
   }, [])
 
   return (
+    <div>
     <Card
       // className={clsx(classes.root, className)}
       // {...rest}
@@ -170,7 +173,14 @@ export default function MatchHistory() {
         </Button>
       </Box>
     </Card>
+    <div>
+    <Button onClick={handleReturn}>Trở về</Button>
+    </div>
+    </div>
   );
+  function handleReturn(){
+    history.push('/homepage')
+  }
 };
 
 // LatestOrders.propTypes = {
