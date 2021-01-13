@@ -140,7 +140,7 @@ function Homepage() {
         );
     }
     function handleBack(){
-
+        socket.emit('cancelroom',"1");
     }
     function findRival(e) {
         setRival(".... Đang tìm đối thủ ....")

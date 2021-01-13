@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         marginTop:10
     },
+    margin_top:{
+        marginTop:20
+    }
 
 
 }));
@@ -307,9 +310,15 @@ function Game(props) {
                     winLine={winCells}
                 />
             </div>
-
-            <div className="game-info">              
-                <div>
+            
+            <div className="game-info">       
+            <div >
+                Ten phong: {props.roomInfo.id}
+            </div>
+            <div className={classes.margin_top}>
+                Pass:{props.roomInfo.pass}
+            </div>       
+                <div className={classes.margin_top} >
                     playerX: {props.roomInfo.playerX}
                     {checkX}
                     {time_show_X}

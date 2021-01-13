@@ -57,16 +57,29 @@ export default function ItemOnlineUser(props){
         // }
         socket.emit('cancelroom',data);
     })
+    const name=localStorage.getItem('name');
+    const _name=name.slice(1, name.length - 1);
+    const isMe= (_name===props.name)
     return (
+      isMe ? (
         <>
          <CancelRoom open={open} closeDialog={closeDialog}/>
         <ListItemText 
         primary={props.name} />
-        
-
-      <IconButton onClick={handleInvite} disabled={disabled}>
-        <SendIcon />
-      </IconButton>
+      
       </>
+      ):(
+        <>
+        <CancelRoom open={open} closeDialog={closeDialog}/>
+       <ListItemText 
+       primary={props.name} />
+       
+
+     <IconButton onClick={handleInvite} disabled={disabled}>
+       <SendIcon />
+     </IconButton>
+     </>
+      )
+        
     )
 }

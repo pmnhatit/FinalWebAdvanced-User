@@ -13,6 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import socket from '../socket.io';
 import ScreenGame from '../ScreenGame/screengame'
 import { Context } from "../Constant/context";
+import { useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(5),
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 function SettingRoom() {
     const classes = useStyles();
-
+    const history = useHistory();
     const [value, setValue] = React.useState('0');
     const [name, setName] = useState('');
     const [time, setTime] = React.useState(20);
@@ -190,11 +191,20 @@ function SettingRoom() {
                         <Button color="primary" onClick={handleSubmit} disabled={disabled}>
                             {createroom}
                         </Button>
+                      
                     </div>
+                    <Button color="primary" onClick={handleBack} >
+                            Hủy trận
+                        </Button>
 
                 </div>
             </center>
         );
+    }
+    function handleBack(){
+      
+        socket.emit('cancelroom',"1");
+        history.push('/homepage');
     }
 }
 

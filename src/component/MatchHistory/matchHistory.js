@@ -110,6 +110,9 @@ export default function MatchHistory() {
                 <TableCell>
                   Status
                 </TableCell>
+                <TableCell>
+                  
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -134,6 +137,17 @@ export default function MatchHistory() {
                       label={order.status}
                       size="small"
                     />
+                  </TableCell>
+                  <TableCell>
+                  <Button
+                      color="primary"
+                      endIcon={<ArrowRightIcon />}
+                      size="small"
+                      variant="text"
+                      href={`/gamehistory/${order._id}`}
+                      >
+                       View all
+                     </Button>
                   </TableCell>
                 </TableRow>
               ))}
