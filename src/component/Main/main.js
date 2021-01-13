@@ -30,7 +30,7 @@ export default function Main()
         <div className="main-route-place">
             <Switch>
             <Context.Provider value={[context, setContext]}>
-            <PrivateRoute  path='/signup' component={SignUp}/>
+            <Route  path='/signup' component={SignUp}/>
             <PrivateRoute  path='/online' component={OnlineUser}/>
             <Route exact path='/' component={SignIn}/>
             <PrivateRoute exact path='/app' component={App}/>
