@@ -32,12 +32,10 @@ export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const history = useHistory();
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
+  
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleMenu = async(event) => {
+    {setAnchorEl(event.currentTarget);}
   };
 
   const handleClose = () => {
@@ -53,20 +51,33 @@ export default function MenuAppBar() {
     handleClose();
     history.push('/profile');
   }
+  
+  const handleChart=()=>
+  {
+    handleClose();
+    history.push('/chart');
+  }
+  const handleLogout=()=>
+  {
+    localStorage.setItem("user", JSON.stringify(""));
+    localStorage.removeItem("token");
+    
+    history.push('/');
+  }
 
   return (
     <div className={classes.root}>
       <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={auth}
-              onChange={handleChange}
-              aria-label="login switch"
-            />
-          }
-          label={auth ? "Logout" : "Login"}
-        />
+        {/* <FormControlLabel
+          // control={
+          //   <Switch
+          //     checked={auth}
+          //     onChange={handleChange}
+          //     aria-label="login switch"
+          //   />
+          // }
+          //label={auth ? "Logout" : "Login"}
+        /> */}
       </FormGroup>
       <AppBar position="static">
         <Toolbar>
@@ -107,9 +118,10 @@ export default function MenuAppBar() {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleProfile}>Profile</MenuItem>
-                <MenuItem onClick={handleHistory} >Match History</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleProfile}>Thông tin cá nhân</MenuItem>
+                <MenuItem onClick={handleHistory} >Lịch sử đấu</MenuItem>
+                <MenuItem onClick={handleChart}>Bảng xếp hạng</MenuItem>
+                <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
               </Menu>
             </div>
           )}

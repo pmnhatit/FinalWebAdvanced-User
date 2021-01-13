@@ -75,6 +75,9 @@ export default function SignIn() {
 
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [err,setErr]=useState(false);
+  const [errMess, setErrMess]= useState("");
+
   let once_time=0;
   socket.emit('disconnect');
   const createFetch = async (linkUrl, body)=>
@@ -90,7 +93,12 @@ export default function SignIn() {
     .then((res) => res.json())
     .then((result) => {
       //console.log(result);
+      setErr(true);
+      setErrMess(result.message);
       saveLocalStorage(result);
+      console.log(result);
+      
+
       console.log(result.user.name);
       if(once_time===0){
         const data={
@@ -101,12 +109,12 @@ export default function SignIn() {
         socket.emit('tableonline');
         once_time++;
       }
-      history.push('/homepage');
-    
+      if(result.message=="200OK")
+        history.push('/homepage');
     })
     .catch((err) => {
       setSuccess(false);
-      console.log("error aa");
+      console.log(err);
     });
 }
 
@@ -156,7 +164,7 @@ export default function SignIn() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Đăng nhập
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -183,23 +191,22 @@ export default function SignIn() {
             autoComplete="current-password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
+          
+          {err&&
+      <label>{errMess}</label>
+      }
           <Button
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={handlerLogin}
-          >
-            Sign In
+            onClick={handlerLogin}>
+            Đăng nhập
           </Button>
           <Grid container>
             <Grid item xs>
               <Link href="/forgot-password" variant="body2">
-                Forgot password?
+                Quên mật khẩu
               </Link>
             </Grid>
             <Grid item>
@@ -230,7 +237,7 @@ export default function SignIn() {
     cssClass="my-facebook-button-class"
     icon="fa-facebook"
   />, */}
-          
+      
       </div>
       <Box mt={8}>
         <Copyright />
