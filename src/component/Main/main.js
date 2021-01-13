@@ -17,6 +17,8 @@ import changePassword from "../Profile/ChangePassword/changePassword";
 import VerifyAccount from "../VerifyAccount/verifyAccount";
 import ForgotPassword from "../ForgotPassword/forgotPassword";
 import ResetPassword from "../ResetPassword/resetPassword";
+import Chart from "../Charts/Charts"
+import {PrivateRoute} from "./privateRouter"
 export default function Main()
 {   
     const [context, setContext] = useState("default context value");
@@ -28,21 +30,22 @@ export default function Main()
         <div className="main-route-place">
             <Switch>
             <Context.Provider value={[context, setContext]}>
-            <Route  path='/signup' component={SignUp}/>
-            <Route  path='/online' component={OnlineUser}/>
+            <PrivateRoute  path='/signup' component={SignUp}/>
+            <PrivateRoute  path='/online' component={OnlineUser}/>
             <Route exact path='/' component={SignIn}/>
-            <Route exact path='/app' component={App}/>
-            <Route exact path='/homepage' component={Homepage}/>
-            <Route  exact path='/history' component={MatchHistory}/>
-            <Route  exact path='/tableonline' component={TableOnline}/>
-            <Route exact path='/settingroom' component={SettingRoom}/>
-            <Route exact path='/screengame' component={ScreenGame}/>
-            <Route exact path='/homepage_game' component={HomepageGame}/>
-            <Route exact path='/profile' component={Profile}/>
-            <Route exact path='/changepassword' component={changePassword}/>
-            <Route exact path='/verify-email/:code/:username' component={VerifyAccount}/>
-            <Route exact path='/forgot-password' component={ForgotPassword}/>
-            <Route exact path='/reset-password/:username' component={ResetPassword}/>
+            <PrivateRoute exact path='/app' component={App}/>
+            <PrivateRoute exact path='/homepage' component={Homepage}/>
+            <PrivateRoute  exact path='/history' component={MatchHistory}/>
+            <PrivateRoute  exact path='/tableonline' component={TableOnline}/>
+            <PrivateRoute exact path='/settingroom' component={SettingRoom}/>
+            <PrivateRoute exact path='/screengame' component={ScreenGame}/>
+            <PrivateRoute exact path='/homepage_game' component={HomepageGame}/>
+            <PrivateRoute exact path='/profile' component={Profile}/>
+            <PrivateRoute exact path='/changepassword' component={changePassword}/>
+            <PrivateRoute exact path='/verify-email/:code/:username' component={VerifyAccount}/>
+            <PrivateRoute exact path='/forgot-password' component={ForgotPassword}/>
+            <PrivateRoute exact path='/reset-password/:username' component={ResetPassword}/>
+            <PrivateRoute exact path='/chart' component={Chart}/>
             </Context.Provider>
             </Switch>
         </div>
