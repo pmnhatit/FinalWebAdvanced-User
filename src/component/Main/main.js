@@ -23,8 +23,8 @@ import GameHistory from '../DetailHistory/gamehistory'
 export default function Main()
 {   
     const [context, setContext] = useState("default context value");
-    //  localStorage.setItem('backend',`https://apiuser-caro.herokuapp.com/`);
-    localStorage.setItem('backend',`http://localhost:5000/`);
+      localStorage.setItem('backend',`https://apiuser-caro.herokuapp.com/`);
+    //localStorage.setItem('backend',`http://localhost:5000/`);
     return(
         <BrowserRouter>
         <MenuAppBar/>

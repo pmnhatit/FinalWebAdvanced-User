@@ -3,4 +3,4 @@ import io from 'socket.io-client';
 
 const socket = io('https://apiuser-caro.herokuapp.com/');
 const socket_1 = io('http://localhost:5000/');
-export default socket_1;
+export default socket;

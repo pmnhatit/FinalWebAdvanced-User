@@ -58,6 +58,7 @@ export default function(){
   const [open, setOpen] = useState(false);
   const [mess, setMess] = useState("");
   const history = useHistory();
+  const url = localStorage.getItem("backend");
 const handleClick = () =>{
     history.push("/");
 }
@@ -69,8 +70,8 @@ const resetPass = async () => {
     };
     console.log(body);
     console.log(1);
-    // const res = await fetch(url + `users/signup`, {
-      const res = await fetch("https://apiuser-caro.herokuapp.com/users/reset-password", {
+    const res = await fetch(url + `users/reset-password`, {
+      // const res = await fetch("https://apiuser-caro.herokuapp.com/users/reset-password", {
       method: "POST",
       mode: "cors",
       headers: {

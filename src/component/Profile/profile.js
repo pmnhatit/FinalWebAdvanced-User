@@ -28,7 +28,7 @@ export default function Profile() {
     const user= JSON.parse(localStorage.getItem('user'));
     const token=JSON.parse(localStorage.getItem('token'));
     const [open, setOpen] = React.useState(false);
-    const [profile,setProfile]= useState({_id:"",image:"https://res.cloudinary.com/dvtm1pjkp/image/upload/v1610119650/sample.jpg",password:"",username:"",name:"",phone:"",email:"",matches:0,trophies:1000,win_rate:100}); 
+    const [profile,setProfile]= useState({_id:"",image:"",password:"",username:"",name:"",phone:"",email:"",matches:0,trophies:1000,win_rate:100}); 
     const [fileInput,setFileInput]=useState();
     const [selectedFile, setSelectedFile]= useState();
     const [previewSource,setPreviewSource] =useState();

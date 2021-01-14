@@ -77,8 +77,8 @@ export default function SignUp() {
     };
     console.log(body);
     console.log(1);
-    // const res = await fetch(url + `users/signup`, {
-      const res = await fetch("http://localhost:5000/users/forgot-password", {
+    const res = await fetch(url + `users/forgot-password`, {
+      // const res = await fetch("http://localhost:5000/users/forgot-password", {
       method: "POST",
       mode: "cors",
       headers: {
