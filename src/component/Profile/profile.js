@@ -39,7 +39,7 @@ export default function Profile() {
     
 
     useEffect(() => {
-      console.log("aoaoa"+refresh);
+     
       const res =  fetch(url+`profile/${user._id}`, {
         method: "GET",
         mode: "cors",
@@ -97,19 +97,21 @@ export default function Profile() {
       const handleClose = () => {
         setOpen(false);
       };
-      const handleFileInputChange=(e)=>
+      const handleFileInputChange=async (e)=>
       {
         console.log("handleFile");
           const file = e.target.files[0];
-          previewFile(file);
+          await previewFile(file);
       }
-      const previewFile =(file)=>
+      const previewFile =async (file)=>
       {
           const reader= new FileReader();
           reader.readAsDataURL(file);
-          reader.onloadend=()=>
+          reader.onloadend=async()=>
           {
-            setPreviewSource(reader.result);
+            console.log(reader.result)
+            await setPreviewSource(reader.result);
+            console.log(previewSource);
           }
       } 
       const handleUpload =async()=>
@@ -118,23 +120,25 @@ export default function Profile() {
         setRefresh(!refresh);
       }
       const updateImage = async()=>
-      { if(!previewSource) return;
+      {  console.log("run ")
+      if(!previewSource) return;
          const body={
           data:previewSource
         }
-        const res=await fetch(url+`profile/changeimage/${user._id}`,{
-          method: "POST",
-          mode: "cors",
-          headers:{
-            Authorization: 'Bearer '+`${token}`,
-            'Content-Type': 'application/json',
-          },
-        
-          body:JSON.stringify(body),
+       console.log("data ",body)
+       const res= fetch(url+`profile/changeimage/${user._id}`,{
+        method: "POST",
+        mode: "cors",
+        headers:{
+          Authorization: 'Bearer '+`${token}`,
+          'Content-Type': 'application/json',
+        },
+      
+        body:JSON.stringify(body),
       })
       .then((res) => res.json())
-      .then(async(result) => {
-        await setProfile(result);
+      .then((result) => {
+         setProfile(result);
       })
       .catch((err)=>
       {

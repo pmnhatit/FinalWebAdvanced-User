@@ -78,7 +78,7 @@ export default function SignUp() {
     // history.push("/");
   };
   const checkUser = async()=>
-  {  //console.log("username is ok: "+!userName.match(usernameCheck));
+  {  console.log("username is ok: "+!userName.match(usernameCheck));
     if(userName=="" ||!userName.match(usernameCheck))  
     { 
       
@@ -87,7 +87,7 @@ export default function SignUp() {
     }
     if(password=="" )  
     { 
-      console.log("run");
+     
       setContent("Mật khẩu rỗng");
       return false;
     }
@@ -99,21 +99,22 @@ export default function SignUp() {
     }
     if(phone=="" || !phone.match(phoneCheck))
     {
+      
       setContent("Số điện thoại rỗng hoặc có kí tự khác số");
       return false;
     }
     if(email==""|| !email.match(emailCheck))
-    {
+    { 
       setContent("Email rỗng hoặc không đúng");
       return false;
     }
-    //console.log("true");
+   
       return true;
 
   }
   const sendaddUser = async () => {
     //console.log("send"); 
-    //console.log("check:"+ await checkUser());
+    console.log("check:"+ await checkUser());
     if(! await checkUser())
     {   
         setOpen(true);
@@ -131,7 +132,7 @@ export default function SignUp() {
     console.log(body);
     //console.log(1);
     // const res = await fetch(url + `users/signup`, {
-      const res = await fetch("https://apiuser-caro.herokuapp.com/users/signup", {
+      const res = await fetch("http://localhost:5000/users/signup", {
       method: "POST",
       mode: "cors",
       headers: {

@@ -1,11 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext,useEffect } from 'react';
 
 import '../../index.css';
 import Board from './Board'
 import checkWin from './services'
 import Config from '../Constant/configs'
 import socket from '../socket.io'
-import { Button } from "@material-ui/core";
+import { Button,Avatar } from "@material-ui/core";
 import { Context } from "../Constant/context";
 import Check from '@material-ui/icons/DoneOutline';
 import IconButton from '@material-ui/core/IconButton';
@@ -22,6 +22,7 @@ import SurrenderViewer from '../Notification/surrender_view'
 import Winner from '../Notification/winner'
 import WinnerViewer from '../Notification/winner_view'
 import {Chat} from '../Chatroom/Chat/chat'
+
 const useStyles = makeStyles((theme) => ({
 
     item: {
@@ -31,7 +32,11 @@ const useStyles = makeStyles((theme) => ({
     },
     margin_top:{
         marginTop:20
-    }
+    },
+    large: {
+        width: theme.spacing(6),
+        height: theme.spacing(6),
+      },
 
 
 }));
@@ -65,6 +70,53 @@ function Game(props) {
     const [disabled_button,setDisabledButton]=useState(true);
     const [test,setTest]=useState(0);
     const [time,setTime]=useState(0);
+
+    const [avtX,setAvtX]=useState('');
+    const [avtO,setAvtO]=useState('');
+    const url = localStorage.getItem("backend");
+    const user= JSON.parse(localStorage.getItem('user'));
+    const token=JSON.parse(localStorage.getItem('token'));
+    
+    useEffect(() => {
+       
+        const res =  fetch(url+`profile/${props.roomInfo.idplayerX}`, {
+          method: "GET",
+          mode: "cors",
+          headers: {
+             Authorization:'Bearer '+ `${token}`,
+             'Content-Type': 'application/json',
+        },
+          // body: JSON.stringify(body),
+        })
+          .then((res) => res.json())
+          .then((result) => {
+            setAvtX(result.image);
+            
+          })
+          .catch((err) => {
+           
+          });
+          const res2 =  fetch(url+`profile/${props.roomInfo.idplayerO}`, {
+            method: "GET",
+            mode: "cors",
+            headers: {
+               Authorization:'Bearer '+ `${token}`,
+               'Content-Type': 'application/json',
+          },
+            // body: JSON.stringify(body),
+          })
+            .then((res) => res.json())
+            .then((result) => {
+                console.log("result ",result);
+                setAvtO(result.image)
+              
+            })
+            .catch((err) => {
+             
+            });
+        }, [])
+
+
     function closeDialog(){
         setOpen(!open);
       }
@@ -87,6 +139,7 @@ function Game(props) {
     });
     socket.off('readyX');
     socket.on('readyX', (data) => {
+        console.log("reay dkmksd" ,data);
         console.log('loi roi');
         setCheckX(
             <IconButton color="primary">
@@ -96,7 +149,7 @@ function Game(props) {
     })
     socket.off('readyO');
     socket.on('readyO', (data) => {
-
+        console.log("reayO dkmksd" ,data);
         setCheckO(
             <IconButton color="primary">
                 <Check />
@@ -314,16 +367,20 @@ function Game(props) {
             <div className="game-info">       
             <div >
                 Ten phong: {props.roomInfo.id}
+              
             </div>
             <div className={classes.margin_top}>
                 Pass:{props.roomInfo.pass}
+              
             </div>       
                 <div className={classes.margin_top} >
+                <Avatar  src={avtX} className={classes.large} />
                     playerX: {props.roomInfo.playerX}
                     {checkX}
                     {time_show_X}
                 </div>
                 <div>
+                <Avatar  src={avtO} className={classes.large} />
                     playerO: {props.roomInfo.playerO}
                     {checkO}
                     {time_show_O}
@@ -444,6 +501,7 @@ function Game(props) {
         //     name: context.name,
         //     idroom: props.roomInfo.id
         // }
+        console.log("ready ",data);
         socket.emit('ready', data);
 
     }

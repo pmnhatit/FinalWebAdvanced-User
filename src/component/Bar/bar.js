@@ -12,7 +12,7 @@ import FormGroup from "@material-ui/core/FormGroup";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { useHistory } from "react-router-dom";
-
+import socket from '../socket.io'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,6 +61,7 @@ export default function MenuAppBar() {
   {
     localStorage.setItem("user", JSON.stringify(""));
     localStorage.removeItem("token");
+    socket.emit('logout');
     
     history.push('/');
   }

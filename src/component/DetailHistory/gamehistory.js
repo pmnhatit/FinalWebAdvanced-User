@@ -52,6 +52,8 @@ function Game() {
     const [step,setStep]=useState([]);
     const [clicktime,setClickTime]=useState(0);
     const [chat,setChat]=useState([]);
+    const[player1,setPlayer1]=useState('');
+    const[player2,setPlayer2]=useState('');
    
     
     const url = localStorage.getItem("backend");
@@ -72,6 +74,8 @@ function Game() {
     .then((result) => {
         setStep(result.move.move);
         setChat(result.chat.chat);
+        setPlayer1(result.player1);
+        setPlayer2(result.player2)
       console.log("knmkasnd ", result.chat.chat);
     })
     .catch((err) => {
@@ -153,11 +157,11 @@ function Game() {
 
             <div className="game-info">              
                 <div>
-                    playerX: 
+                    player1: {player1}
                 
                 </div>
                 <div>
-                    playerO:
+                    player2: {player2}
                    
                 </div>
                 <div>

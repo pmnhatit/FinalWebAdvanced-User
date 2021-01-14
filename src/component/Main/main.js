@@ -19,6 +19,7 @@ import ForgotPassword from "../ForgotPassword/forgotPassword";
 import ResetPassword from "../ResetPassword/resetPassword";
 import Chart from "../Charts/Charts"
 import {PrivateRoute} from "./privateRouter"
+import GameHistory from '../DetailHistory/gamehistory'
 export default function Main()
 {   
     const [context, setContext] = useState("default context value");
@@ -43,9 +44,10 @@ export default function Main()
             <PrivateRoute exact path='/profile' component={Profile}/>
             <PrivateRoute exact path='/changepassword' component={changePassword}/>
             <PrivateRoute exact path='/verify-email/:code/:username' component={VerifyAccount}/>
-            <PrivateRoute exact path='/forgot-password' component={ForgotPassword}/>
-            <PrivateRoute exact path='/reset-password/:username' component={ResetPassword}/>
+            <Route exact path='/forgot-password' component={ForgotPassword}/>
+            <Route exact path='/reset-password/:username' component={ResetPassword}/>
             <PrivateRoute exact path='/chart' component={Chart}/>
+            <PrivateRoute exact path='/gamehistory/:id' component={GameHistory}/>
             </Context.Provider>
             </Switch>
         </div>
