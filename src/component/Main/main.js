@@ -23,11 +23,15 @@ import GameHistory from '../DetailHistory/gamehistory'
 export default function Main()
 {   
     const [context, setContext] = useState("default context value");
-      localStorage.setItem('backend',`https://apiuser-caro.herokuapp.com/`);
+    localStorage.setItem('backend',`https://apiuser-caro.herokuapp.com/`);
+    const user= JSON.parse(localStorage.getItem('user'));
     //localStorage.setItem('backend',`http://localhost:5000/`);
     return(
         <BrowserRouter>
-        <MenuAppBar/>
+        {user && (
+            <MenuAppBar/>
+        )}
+        {/* <MenuAppBar/> */}
         <div className="main-route-place">
             <Switch>
             <Context.Provider value={[context, setContext]}>

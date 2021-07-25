@@ -5,6 +5,7 @@ import  { useEffect } from "react";
 import { v4 as uuid } from 'uuid';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Context } from "../Constant/context";
+import { useHistory } from "react-router-dom";
 import PropTypes from 'prop-types';
 import {
   Box,
@@ -24,8 +25,6 @@ import {
 } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
-
-
 const useStyles = makeStyles(() => ({
   root: {},
   actions: {
@@ -33,9 +32,9 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-
 export default function MatchHistory() {
   const classes = useStyles();
+  const history=useHistory();
   // const [orders] = useState(data);
   const [context, setContext] = useContext(Context);
   //----------------------------------------------
@@ -71,9 +70,13 @@ export default function MatchHistory() {
       setSuccess(false);
       console.log("fail load history");
     });
-  }, [])
+  }, []);
+  function handleReturn(){
+    history.push('/homepage')
+  }
 
   return (
+    <>
     <Card
       // className={clsx(classes.root, className)}
       // {...rest}
@@ -145,7 +148,7 @@ export default function MatchHistory() {
         justifyContent="flex-end"
         p={2}
       >
-        <Button
+        {/* <Button
           color="primary"
           endIcon={<ArrowRightIcon />}
           size="small"
@@ -153,12 +156,18 @@ export default function MatchHistory() {
           href='/'
         >
           Xem chi tiết
-        </Button>
+        </Button> */}
       </Box>
-       <Button variant="contained" href='/homepage'  color="primary">
+       {/* <Button variant="contained" href='/homepage'  color="primary">
            Quay về
-        </Button>
+        </Button> */}
     </Card>
+    <div>
+      <div style={{marginTop: '10px'}}>
+        <Button variant="contained" color="primary" onClick={handleReturn}>Trở về</Button>
+      </div>
+    </div>
+    </>
   );
 };
 

@@ -157,6 +157,7 @@ export default function SignIn() {
   };
 
   return (
+    <>
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -216,19 +217,30 @@ export default function SignIn() {
             </Grid>
           </Grid>
         </form>
-        <GoogleLogin
-          clientId="718820147204-d08vqnq79hnapbjv3099umi363a7bf5k.apps.googleusercontent.com"
-          buttonText="Login"
-          onSuccess={responseGoogle}
-          onFailure={responseGoogle}
-          cookiePolicy={"single_host_origin"}
-        />
-        <FacebookLogin
-          appId="1156392861430294"
-          //autoLoad={true}
-          fields="name,email,picture"
-          //onClick={componentClicked}
-          callback={responseFacebook} />,
+        <div style={{display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
+          <div style={{alignItems: 'flex-start'}}>
+            <GoogleLogin
+            clientId="718820147204-d08vqnq79hnapbjv3099umi363a7bf5k.apps.googleusercontent.com"
+            buttonText="Login with Google"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            cookiePolicy={"single_host_origin"}
+            />
+          </div>
+          <div style={{alignItems: 'flex-end', marginLeft: '5px'}}>
+            <FacebookLogin
+            appId="1156392861430294"
+            textButton="Login with Facebook"
+            //autoLoad={true}
+            fields="name,email,picture"
+            size="small"
+            font-size
+            //onClick={componentClicked}
+            callback={responseFacebook} />
+          </div>
+        
+        </div>
+        
           {/* <FacebookLogin
     appId="1156392861430294"
     autoLoad={true}
@@ -243,6 +255,7 @@ export default function SignIn() {
         <Copyright />
       </Box>
     </Container>
+    </>
   );
 
 }

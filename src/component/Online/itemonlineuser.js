@@ -7,8 +7,10 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Context } from "../Constant/context";
-import socket from '../socket.io'
-import CancelRoom from '../Notification/cancelRoom'
+import socket from '../socket.io';
+import CancelRoom from '../Notification/cancelRoom';
+import onlineIcon from './icon_online.png';
+
 export default function ItemOnlineUser(props){
     const [context, setContext] = useContext(Context);
     const [disabled,setDisabled]=useState(false);
@@ -64,14 +66,16 @@ export default function ItemOnlineUser(props){
       isMe ? (
         <>
          <CancelRoom open={open} closeDialog={closeDialog}/>
-        <ListItemText 
+         <img style={{height: '15px', width: '15px', alignSelf: 'center', marginRight:'3px'}} src={onlineIcon} alt="online icon" />
+        <ListItemText style={{alignSelf: 'center'}}
         primary={props.name} />
       
       </>
       ):(
         <>
         <CancelRoom open={open} closeDialog={closeDialog}/>
-       <ListItemText 
+        <img style={{height: '15px', width: '15px', alignSelf: 'center', marginRight:'3px'}} src={onlineIcon} alt="online icon" />
+       <ListItemText style={{alignSelf: 'center'}}
        primary={props.name} />
        
 

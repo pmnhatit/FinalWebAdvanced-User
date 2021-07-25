@@ -97,7 +97,7 @@ export default function InteractiveList(props) {
                 </Grid>
                 <Grid item xs={2} >
                     <div className={classes.title} >
-                    <Button onClick={handeClick}>
+                    <Button variant="contained" color="secondary" onClick={handeClick}>
                         Chơi game
                     </Button>
                     </div>

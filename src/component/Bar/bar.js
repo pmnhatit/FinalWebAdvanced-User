@@ -13,6 +13,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { useHistory } from "react-router-dom";
 import socket from '../socket.io'
+import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,6 +66,9 @@ export default function MenuAppBar() {
     
     history.push('/');
   }
+  const handleHome = () =>{
+    history.push('/homepage');
+  }
 
   return (
     <div className={classes.root}>
@@ -88,10 +92,10 @@ export default function MenuAppBar() {
             color="inherit"
             aria-label="menu"
           >
-            <MenuIcon />
+            <SportsEsportsIcon onClick={handleHome}/>
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Photos
+            Tic-tac-toe
           </Typography>
           {auth && (
             <div>

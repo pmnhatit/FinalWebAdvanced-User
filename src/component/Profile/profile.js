@@ -156,7 +156,7 @@ export default function Profile() {
           <Avatar  src={profile.image} className={classes.large} />
         </Grid>
         <Grid item xs={12} sm={5}>
-          <input type="file" onChange={handleFileInputChange}></input>
+          <input type="file" style={{marginBottom: '5px'}} onChange={handleFileInputChange}></input>
           <Button variant="contained" onClick={handleUpload} color="primary">Thay đổi ảnh đại diện</Button>
         </Grid>
         { previewSource && (
@@ -259,8 +259,8 @@ export default function Profile() {
            Quay về
         </Button>
         </Grid>
-      <Grid item xs={12} sm={5}> 
-        <Button variant="contained" href ='/changepassword'color="primary">
+      <Grid item xs={12} sm={5} style={{display: 'flex', justifyContent: 'flex-end'}}> 
+        <Button variant="contained" style={{marginRight: '5px'}} href ='/changepassword'color="primary">
            Đổi mật khẩu
         </Button>
         <Button variant="contained" onClick={handleClickOpen} color="primary">

@@ -84,7 +84,7 @@ export default function MatchHistory() {
       // className={clsx(classes.root, className)}
       // {...rest}
     >
-      <CardHeader title="Latest Orders" />
+      <CardHeader title="Histories" />
       <Divider />
       <PerfectScrollbar>
         <Box minWidth={800}>
@@ -163,18 +163,18 @@ export default function MatchHistory() {
         justifyContent="flex-end"
         p={2}
       >
-        <Button
+        {/* <Button
           color="primary"
           endIcon={<ArrowRightIcon />}
           size="small"
           variant="text"
         >
           View all
-        </Button>
+        </Button> */}
       </Box>
     </Card>
-    <div>
-    <Button onClick={handleReturn}>Trở về</Button>
+    <div style={{marginTop: '10px'}}>
+    <Button variant="contained" color="primary" onClick={handleReturn}>Trở về</Button>
     </div>
     </div>
   );
